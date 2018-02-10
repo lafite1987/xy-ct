@@ -3,9 +3,9 @@ package com.lfyun.xy_ct.mapper;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.lfyun.xy_ct.entity.MovieEntity;
+import com.lfyun.xy_ct.entity.OrderEntity;
 
 @Repository
-public interface MovieMapper extends BaseMapper<MovieEntity> {
+public interface OrderMapper extends BaseMapper<OrderEntity> {
 
 }
