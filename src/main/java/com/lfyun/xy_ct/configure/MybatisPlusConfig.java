@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 
 @Configuration
-@MapperScan("com.hg.tl_hg.mapper") 
+@MapperScan("com.lfyun.xy_ct.mapper") 
 public class MybatisPlusConfig {
     /**
      * mybatis-plus 分页插件

@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TlHgApplication {
+public class XyCtApplication {
 
 	public static void main(String[] args) {
-        SpringApplication.run(TlHgApplication.class, args);
+        SpringApplication.run(XyCtApplication.class, args);
     }
 }
