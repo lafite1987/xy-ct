@@ -7,8 +7,8 @@ import lombok.Getter;
  */
 @Getter
 public enum ResultCodeEnums {
-    OK(0 , "成功"),
-    ERROR(-1 , "失败")
+    OK(200 , "成功"),
+    ERROR(500 , "失败")
     ;
 
     /**

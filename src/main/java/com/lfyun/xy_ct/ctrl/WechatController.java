@@ -2,6 +2,8 @@ package com.lfyun.xy_ct.ctrl;
 
 import java.net.URLEncoder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,8 @@ import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 @RequestMapping("/wechat")
 public class WechatController {
 
+	static Logger LOGGER = LoggerFactory.getLogger(WechatController.class);
+	
     @Autowired
     private WxMpService wxMpService;
 
@@ -37,6 +41,7 @@ public class WechatController {
 
     @GetMapping("/authorize")
     public String authorize(@RequestParam("returnUrl") String returnUrl) {
+    	LOGGER.error("returnUrl:{}", returnUrl);
         //1.配置微信公众号信息
         String url = projectUrlConfig.getMpAuthorizeUrl()+"/sell/wechat/userInfo";
         String redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAUTH2_SCOPE_USER_INFO, URLEncoder.encode(returnUrl));

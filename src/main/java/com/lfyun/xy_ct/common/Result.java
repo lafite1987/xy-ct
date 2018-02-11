@@ -1,5 +1,7 @@
 package com.lfyun.xy_ct.common;
 
+import com.lfyun.xy_ct.common.enums.ResultCodeEnums;
+
 public class Result<T> {
 
 	private int code = 200;
@@ -12,7 +14,15 @@ public class Result<T> {
 	}
 	
 	public static <T> Result<T> fail(int code) {
-		return new Result<T>();
+		Result<T> result = new Result<T>();
+		result.setCode(code);
+		return result;
+	}
+	
+	public static <T> Result<T> fail() {
+		Result<T> result = new Result<T>();
+		result.setCode(ResultCodeEnums.ERROR.getCode());
+		return result;
 	}
 	
 	private Result() {
