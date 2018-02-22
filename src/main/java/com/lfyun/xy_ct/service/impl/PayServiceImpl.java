@@ -74,7 +74,7 @@ public class PayServiceImpl implements PayService {
 
         if(!MathUtils.isEqual(orderDTO.getOrderAmount().doubleValue() , payResponse.getOrderAmount())) {
             //支付金额不一致
-            log.error("【异步通知】支付金额与原订单金额不一致，微信请求金额={} , 订单原今额={}，orderId={}"
+            log.error("【异步通知】支付金额与原订单金额不一致，微信请求金额={} , 订单原金额={}，orderId={}"
                     , payResponse.getOrderAmount() , orderDTO.getOrderAmount() , payResponse.getOrderId());
             throw new SellException(ExceptionCodeEnums.PAY_MONEY_NOT_EQUAL);
         }

@@ -17,12 +17,30 @@ public class OrderEntity {
 	@TableId(value="id",type=IdType.AUTO)
     private Long id;
 	
+	private Long productId;
+	
+	private String productName;
+	
+	/**
+	 * 订单金额
+	 */
+	private Double amount;
+	
+	/**
+	 * 支付状态：1-创建；2-待支付；3-支付成功
+	 */
+	private Integer payStatus;
+	/**
+	 * 用户唯一标识
+	 */
+	private String openid;
 	
 	@TableField(fill = FieldFill.INSERT, value="createTime", strategy = FieldStrategy.IGNORED)
 	private Long createTime;
 	
 	@TableField(fill = FieldFill.INSERT_UPDATE, value="updateTime", strategy = FieldStrategy.IGNORED)
 	private Long updateTime;
+	
 	@TableLogic
     private Integer deleted;
 }

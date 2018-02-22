@@ -4,9 +4,6 @@ import java.math.BigDecimal;
 
 import lombok.Data;
 
-/**
- * Created by Administrator on 2017/10/15 0015.
- */
 @Data
 public class OrderDTO {
     /**订单id*/
