@@ -18,7 +18,7 @@ import com.lfyun.xy_ct.common.User;
 public class SessionManager {
 
 	private static LoadingCache<String, User> CACHE = CacheBuilder.newBuilder()
-			.expireAfterWrite(7*24*60*60, TimeUnit.DAYS).maximumSize(100000)
+			.expireAfterWrite(1, TimeUnit.DAYS).maximumSize(100000)
 			.build(new CacheLoader<String, User>(){
 		@Override
 		public User load(String key) throws Exception {
@@ -30,7 +30,7 @@ public class SessionManager {
 		String token = UUID.randomUUID().toString();
 		response.setHeader("token", token);
 		Cookie cookie = new Cookie("token", token);
-        cookie.setMaxAge(1000000000);
+        cookie.setMaxAge(24*60*60);
         cookie.setHttpOnly(false);
         cookie.setPath("/");
         response.addCookie(cookie);
