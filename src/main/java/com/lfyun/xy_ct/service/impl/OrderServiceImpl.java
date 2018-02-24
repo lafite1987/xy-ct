@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lfyun.xy_ct.common.enums.PayStatusEnums;
 import com.lfyun.xy_ct.dto.OrderDTO;
 import com.lfyun.xy_ct.entity.OrderEntity;
 import com.lfyun.xy_ct.mapper.OrderMapper;
@@ -15,8 +16,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderEntity> imple
 
 	@Override
 	public void pay(OrderDTO orderDTO) {
-		// TODO Auto-generated method stub
-		
+		OrderEntity orderEntity = new OrderEntity();
+		orderEntity.setId(Long.parseLong(orderDTO.getOrderId()));
+		orderEntity.setPayStatus(PayStatusEnums.FINISH.getCode());
+		this.updateById(orderEntity);
 	}
 
 	@Override
@@ -26,6 +29,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderEntity> imple
 		OrderEntity orderEntity = baseMapper.selectOne(entity);
 		OrderDTO orderDTO = new OrderDTO();
 		orderDTO.setOrderId(orderId);
+		orderDTO.setOrderDesc(orderEntity.getProductName());
 		orderDTO.setBuyerOpenid(orderEntity.getOpenid());
 		orderDTO.setOrderAmount(new BigDecimal(orderEntity.getAmount()));
 		return orderDTO;

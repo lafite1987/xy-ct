@@ -15,8 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lfyun.xy_ct.common.Result;
 import com.lfyun.xy_ct.common.enums.ExceptionCodeEnums;
+import com.lfyun.xy_ct.common.enums.PayStatusEnums;
 import com.lfyun.xy_ct.dto.OrderDTO;
-import com.lfyun.xy_ct.exception.SellException;
+import com.lfyun.xy_ct.exception.AppException;
 import com.lfyun.xy_ct.service.OrderService;
 import com.lfyun.xy_ct.service.PayService;
 import com.lly835.bestpay.model.PayResponse;
@@ -45,9 +46,11 @@ public class PayController {
         OrderDTO orderDTO = orderService.getByOrderId(orderId);
         if(orderDTO == null) {
             log.error("【微信下单】订单不存在，orderId={}" , orderId);
-            throw new SellException(ExceptionCodeEnums.ORDER_NOT_FOUND);
+            throw new AppException(ExceptionCodeEnums.ORDER_NOT_FOUND);
         }
-
+        if(orderDTO.getPayStatus() == PayStatusEnums.FINISH.getCode()) {
+        	throw new AppException(ExceptionCodeEnums.ORDER_PAY_NOT_FOUND);
+        }
         //2发起支付
         PayResponse payResponse = payService.create(orderDTO);
 

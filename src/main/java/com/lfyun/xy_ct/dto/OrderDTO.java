@@ -8,7 +8,8 @@ import lombok.Data;
 public class OrderDTO {
     /**订单id*/
     private String orderId;
-
+    /**订单描述*/
+    private String orderDesc;
     /**买家姓名*/
     private String buyerName;
 

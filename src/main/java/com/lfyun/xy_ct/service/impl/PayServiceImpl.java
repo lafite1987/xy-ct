@@ -7,7 +7,7 @@ import com.lfyun.xy_ct.common.enums.ExceptionCodeEnums;
 import com.lfyun.xy_ct.common.util.JsonUtils;
 import com.lfyun.xy_ct.common.util.MathUtils;
 import com.lfyun.xy_ct.dto.OrderDTO;
-import com.lfyun.xy_ct.exception.SellException;
+import com.lfyun.xy_ct.exception.AppException;
 import com.lfyun.xy_ct.service.OrderService;
 import com.lfyun.xy_ct.service.PayService;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
@@ -42,7 +42,7 @@ public class PayServiceImpl implements PayService {
         payRequest.setOpenid(orderDTO.getBuyerOpenid());
         payRequest.setOrderAmount(orderDTO.getOrderAmount().doubleValue());
         payRequest.setOrderId(orderDTO.getOrderId());
-        payRequest.setOrderName(ORDER_NAME);
+        payRequest.setOrderName(orderDTO.getOrderDesc());
         payRequest.setPayTypeEnum(BestPayTypeEnum.WXPAY_H5);
 
         log.info("【发起支付】payRequest={}" , JsonUtils.toJson(payRequest));
@@ -64,7 +64,7 @@ public class PayServiceImpl implements PayService {
         OrderDTO orderDTO = orderService.getByOrderId(payResponse.getOrderId());
         if(null == orderDTO) {
             log.error("【异步通知】订单不存在，orderId={}" , payResponse.getOrderId());
-            throw new SellException(ExceptionCodeEnums.ORDER_NOT_FOUND);
+            throw new AppException(ExceptionCodeEnums.ORDER_NOT_FOUND);
         }
 
         //3.判断订单有效性
@@ -76,7 +76,7 @@ public class PayServiceImpl implements PayService {
             //支付金额不一致
             log.error("【异步通知】支付金额与原订单金额不一致，微信请求金额={} , 订单原金额={}，orderId={}"
                     , payResponse.getOrderAmount() , orderDTO.getOrderAmount() , payResponse.getOrderId());
-            throw new SellException(ExceptionCodeEnums.PAY_MONEY_NOT_EQUAL);
+            throw new AppException(ExceptionCodeEnums.PAY_MONEY_NOT_EQUAL);
         }
 
         //3.4判断支付人（下单人==支付人）

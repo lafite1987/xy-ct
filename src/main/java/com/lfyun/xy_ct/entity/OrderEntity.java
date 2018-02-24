@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableLogic;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.FieldFill;
-import com.baomidou.mybatisplus.enums.FieldStrategy;
 import com.baomidou.mybatisplus.enums.IdType;
 
 import lombok.Data;
@@ -35,10 +34,10 @@ public class OrderEntity {
 	 */
 	private String openid;
 	
-	@TableField(fill = FieldFill.INSERT, value="createTime", strategy = FieldStrategy.IGNORED)
+	@TableField(fill = FieldFill.INSERT, value="createTime")
 	private Long createTime;
 	
-	@TableField(fill = FieldFill.INSERT_UPDATE, value="updateTime", strategy = FieldStrategy.IGNORED)
+	@TableField(fill = FieldFill.INSERT_UPDATE, value="updateTime")
 	private Long updateTime;
 	
 	@TableLogic

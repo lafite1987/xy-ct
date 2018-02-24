@@ -16,7 +16,7 @@ import com.lfyun.xy_ct.common.User;
 import com.lfyun.xy_ct.common.enums.ExceptionCodeEnums;
 import com.lfyun.xy_ct.configure.wx.ProjectUrlConfig;
 import com.lfyun.xy_ct.entity.UserEntity;
-import com.lfyun.xy_ct.exception.SellException;
+import com.lfyun.xy_ct.exception.AppException;
 import com.lfyun.xy_ct.service.SessionManager;
 import com.lfyun.xy_ct.service.UserService;
 
@@ -70,7 +70,7 @@ public class WechatController {
             wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
         } catch (WxErrorException e) {
             log.error("【微信网页授权】授权失败{}" , e);
-            throw new SellException(ExceptionCodeEnums.WECHAT_MP_ERROR , e.getError().getErrorMsg());
+            throw new AppException(ExceptionCodeEnums.WECHAT_MP_ERROR , e.getError().getErrorMsg());
         }
         UserEntity userEntity = userService.getByOpenid(wxMpOAuth2AccessToken.getOpenId());
         if(userEntity == null) {
@@ -94,8 +94,7 @@ public class WechatController {
         user.setNickname(userEntity.getNickname());
         user.setAvatar(userEntity.getAvatar());
         sessionManager.save(user, response);
-        String openId = wxMpOAuth2AccessToken.getOpenId();
-        return "redirect:" + returnUrl + "?openid="+openId;
+        return "redirect:" + returnUrl;
 
     }
 
@@ -115,7 +114,7 @@ public class WechatController {
             wxMpOAuth2AccessToken = wxOpenService.oauth2getAccessToken(code);
         } catch (WxErrorException e) {
             log.error("【微信网页授权】授权失败{}" , e);
-            throw new SellException(ExceptionCodeEnums.WECHAT_MP_ERROR , e.getError().getErrorMsg());
+            throw new AppException(ExceptionCodeEnums.WECHAT_MP_ERROR , e.getError().getErrorMsg());
         }
 
         String openId = wxMpOAuth2AccessToken.getOpenId();
