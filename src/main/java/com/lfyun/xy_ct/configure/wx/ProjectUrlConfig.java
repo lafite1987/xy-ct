@@ -20,6 +20,6 @@ public class ProjectUrlConfig {
     private String openAuthorizeUrl;
 
     /**点餐系统.*/
-    private String sell;
+    private String xyct;
 
 }

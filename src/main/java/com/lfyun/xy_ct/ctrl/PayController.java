@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lfyun.xy_ct.common.Result;
 import com.lfyun.xy_ct.common.enums.ExceptionCodeEnums;
 import com.lfyun.xy_ct.dto.OrderDTO;
 import com.lfyun.xy_ct.exception.SellException;
@@ -34,9 +37,10 @@ public class PayController {
     @Autowired
     private PayService payService;
 
-    @GetMapping("/create")
-    public ModelAndView create(@RequestParam("orderId") String orderId
-            , @RequestParam("returnUrl") String returnUrl , Map<String , Object> map) {
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    @ResponseBody
+    public Object create(@RequestParam("orderId") String orderId
+            , @RequestParam( value = "returnUrl", required = false) String returnUrl , Map<String , Object> map) {
         //1查找订单
         OrderDTO orderDTO = orderService.getByOrderId(orderId);
         if(orderDTO == null) {
@@ -50,9 +54,11 @@ public class PayController {
         //3.存储预支付信息
         map.put("payResponse" , payResponse);
         map.put("returnUrl" , returnUrl);
-
+        Result<PayResponse> result = Result.success();
+        result.setData(payResponse);
         //3.唤起支付
-        return new ModelAndView("pay/create" , map);
+//        return new ModelAndView("pay/create" , map);
+        return result;
     }
 
     /**

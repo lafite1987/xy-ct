@@ -1,4 +1,4 @@
-package com.lfyun.xy_ct.configure;
+/*package com.lfyun.xy_ct.configure;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -19,3 +19,4 @@ public class SessionConfig extends WebMvcConfigurerAdapter {
 	}
 
 }
+*/

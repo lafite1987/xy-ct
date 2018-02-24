@@ -8,8 +8,9 @@ import lombok.Getter;
  */
 @Getter
 public enum PayStatusEnums implements CodeEnums<Integer>{
-    NEW(0 , "未支付"),
-    FINISH(1 , "已支付")
+    NEW(1 , "未支付"),
+    UNFINISH(2 , "未支付"),
+    FINISH(3 , "已支付"),
     ;
 
     private Integer code;

@@ -14,7 +14,7 @@ import lombok.Data;
 @TableName("t_order")
 public class OrderEntity {
 
-	@TableId(value="id",type=IdType.AUTO)
+	@TableId(value="id",type=IdType.ID_WORKER)
     private Long id;
 	
 	private Long productId;

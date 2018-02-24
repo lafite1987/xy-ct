@@ -1,5 +1,7 @@
 package com.lfyun.xy_ct.service.impl;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -19,8 +21,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderEntity> imple
 
 	@Override
 	public OrderDTO getByOrderId(String orderId) {
-		// TODO Auto-generated method stub
-		return null;
+		OrderEntity entity = new OrderEntity();
+		entity.setId(Long.parseLong(orderId));
+		OrderEntity orderEntity = baseMapper.selectOne(entity);
+		OrderDTO orderDTO = new OrderDTO();
+		orderDTO.setOrderId(orderId);
+		orderDTO.setBuyerOpenid(orderEntity.getOpenid());
+		orderDTO.setOrderAmount(new BigDecimal(orderEntity.getAmount()));
+		return orderDTO;
 	}
 
 }
