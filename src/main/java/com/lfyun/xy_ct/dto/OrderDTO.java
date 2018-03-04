@@ -8,6 +8,14 @@ import lombok.Data;
 public class OrderDTO {
     /**订单id*/
     private String orderId;
+    /**
+     * 微信订单号
+     */
+    private String outTradeNo;
+    /**
+	 * 支付完成时间
+	 */
+	private Long payFinishTime;
     /**订单描述*/
     private String orderDesc;
     /**买家姓名*/

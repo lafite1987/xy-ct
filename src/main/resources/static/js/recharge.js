@@ -1,10 +1,3 @@
-<html> 
-<head> 
-<meta charset="utf-8" /> 
-<title>活动页</title>
-<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
-  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-<script type="text/javascript">
 function appendConsole (val) {
     $('#myConsole').append(val).append('<br />')
 }
@@ -29,7 +22,7 @@ function getQueryString(name) {
 }
 
 function share() {
-	wx.onMenuShareAppMessage({  
+    wx.onMenuShareAppMessage({  
         title : '分享好友标题', // 分享标题  
         desc : '分享好友描述', // 分享描述  
         link : 'http://api.mcwh123.com/wxp/recharge.htm', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致  
@@ -89,15 +82,3 @@ $(function() {
     appendConsole(url);
     getJsApiParam(url);
 })
-</script>
-</head>
-<body>
-<div>
-<form action="/wxp/order/create" method="GET">
-<input type="hidden" id="productId" name="productId" value="1001001"/>
-<input type="submit" value="充值"/>
-</form>
-</div>
-<div id="myConsole"></div>
-</body>
-</html>

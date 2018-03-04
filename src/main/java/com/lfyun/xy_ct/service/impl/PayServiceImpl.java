@@ -26,8 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PayServiceImpl implements PayService {
 
-    private final static String ORDER_NAME = "微信点餐支付";
-
     @Autowired
     private BestPayServiceImpl bestPayService;
 
@@ -56,6 +54,7 @@ public class PayServiceImpl implements PayService {
 
     @Override
     public PayResponse notify(String notifyData) {
+    	log.info("WeixinPay notifyData:{}", notifyData);
         //1.处理异步通知
         PayResponse payResponse = bestPayService.asyncNotify(notifyData);
         log.info("【异步通知】payResponse={}" , JsonUtils.toJson(payResponse));
@@ -82,6 +81,8 @@ public class PayServiceImpl implements PayService {
         //3.4判断支付人（下单人==支付人）
 
         //3.更改订单支付状态
+        orderDTO.setOutTradeNo(payResponse.getOutTradeNo());
+        orderDTO.setPayFinishTime(System.currentTimeMillis()/1000);
         orderService.pay(orderDTO);
 
         return payResponse;

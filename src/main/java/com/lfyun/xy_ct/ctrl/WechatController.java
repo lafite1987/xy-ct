@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lfyun.xy_ct.common.User;
 import com.lfyun.xy_ct.common.enums.ExceptionCodeEnums;
+import com.lfyun.xy_ct.common.enums.UserType;
 import com.lfyun.xy_ct.configure.wx.ProjectUrlConfig;
 import com.lfyun.xy_ct.entity.UserEntity;
 import com.lfyun.xy_ct.exception.AppException;
@@ -79,7 +80,7 @@ public class WechatController {
 				userEntity = new UserEntity();
 				userEntity.setOpenid(oauth2getUserInfo.getOpenId());
 				userEntity.setNickname(oauth2getUserInfo.getNickname());
-				userEntity.setUserType("user");
+				userEntity.setUserType(UserType.USER.getCode());
 				userEntity.setAvatar(oauth2getUserInfo.getHeadImgUrl());
 				userService.insert(userEntity);
 			} catch (WxErrorException e) {

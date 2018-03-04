@@ -38,7 +38,8 @@ public class SessionManager {
 	}
 	
 	public User getUser(HttpServletRequest request) {
-		String token = request.getHeader("token");
+		
+		String token = request.getParameter("token");
 		if(token == null || "".equals(token)) {
 			Cookie[] cookies = request.getCookies();
 			if(cookies != null) {

@@ -11,38 +11,30 @@ import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
 
 @Data
-@TableName("t_user")
-public class UserEntity {
+@TableName("t_product_share_user")
+public class ProductShareUserEntity {
 
 	/**
-	 * 用户Id
+	 * Id
 	 */
 	@TableId(value="id",type=IdType.AUTO)
 	private Long id;
 	/**
-	 * 余额
+	 * 商品Id
 	 */
-	private Double balance;
+	private Long productId;
 	/**
-	 * 收益
+	 * 父用户Id
 	 */
-	private Double earning;
+	private Long parentUserId;
 	/**
-	 * 1-用户；2-员工；
+	 * 用户Id
 	 */
-	private Integer userType;
+	private Long userId;
 	/**
-	 * 微信用户唯一标识
+	 * 1-一级；2-二级；3-三级；
 	 */
-	private String openid;
-	/**
-	 * 昵称
-	 */
-	private String nickname;
-	/**
-	 * 头像
-	 */
-	private String avatar;
+	private Integer level;
 	
 	@TableField(fill = FieldFill.INSERT, value="createTime", strategy = FieldStrategy.IGNORED)
 	private Long createTime;

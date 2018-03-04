@@ -9,38 +9,28 @@ import com.baomidou.mybatisplus.enums.IdType;
 
 import lombok.Data;
 
+/**
+ * 后台管理账号
+ * @author honeyleo
+ *
+ */
 @Data
-@TableName("t_order")
-public class OrderEntity {
+@TableName("t_account")
+public class AccountEntity {
 
-	@TableId(value="id",type=IdType.ID_WORKER)
+	@TableId(value="id",type=IdType.AUTO)
     private Long id;
 	
-	private Long productId;
+	private String username;
 	
-	private String productName;
+	private String password;
 	
-	/**
-	 * 订单金额
-	 */
-	private Double amount;
+	private String phone;
 	
 	/**
-	 * 支付状态：1-创建；2-待支付；3-支付成功
+	 * 1-正常；2-封号；
 	 */
-	private Integer payStatus;
-	/**
-	 * 用户唯一标识
-	 */
-	private Long userId;
-	/**
-	 * 微信订单号
-	 */
-	private String outTradeNo;
-	/**
-	 * 支付完成时间精确到秒
-	 */
-	private Long payFinishTime;
+	private Integer state;
 	
 	@TableField(fill = FieldFill.INSERT, value="createTime")
 	private Long createTime;

@@ -1,32 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 01 Transitional//EN" "http://wwwworg/TR/html4/loosedtd"> 
-<html> 
-<head> 
-<meta charset="utf-8" /> 
-<meta name="viewport" content="width=device-width, initial-scale=0, maximum-scale=0, user-scalable=0" /> 
-<meta name="apple-mobile-web-app-capable" content="yes" /> 
-<meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
-<meta name="format-detection" content="telephone=no" /> 
-<title>测试支付</title> 
-</head> 
-  
-<body> 
-  <div class="index_box"> 
-    <div class="apply_name">微信js支付测试</div> 
-      
-      
-    <div class="branch_con"> 
-      <ul> 
-        <li><span class="name">测试支付信息</span></li> 
-      </ul> 
-      <p class="cz_btn"><a href="javascript:pay();" class="btn_1">立即支付</a></p> 
-    </div> 
-    <div id="myConsole"></div>
-  </div> 
-  
-  <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
-  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-  <script type="text/javascript"> 
-  function appendConsole (val) {
+function appendConsole (val) {
       $('#myConsole').append(val).append('<br />')
   }
   wx.ready(function(){
@@ -50,7 +22,7 @@
   }
   
    function onBridgeReady() { 
-	   var orderId = getQueryString("orderId");
+	   var orderId = $("#orderId").val();
 	   alert(orderId);
 	   $.ajax({
 	          url : "/wxp/pay/create",
@@ -117,8 +89,7 @@ function getJsApiParam(url) {
 }
 
 function pay(){ 
+	var orderId = $("#orderId").val();
+	alert("order:" + orderId);
 	getJsApiParam("http://api.mcwh123.com/wxp/order-detail.htm"); 
 } 
-  </script> 
-</body> 
-</html> 
