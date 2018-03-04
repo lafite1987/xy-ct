@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +35,7 @@ public class UserCtrl {
 	
 	@RequestMapping(value = "/list.json", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<DataWrapper<UserEntity>> list(QueryDTO<UserEntity> query) {
+	public Result<DataWrapper<UserEntity>> list(@RequestBody QueryDTO<UserEntity> query) {
 		UserEntity userEntity = query.getQeury();
 		EntityWrapper<UserEntity> wrapper = new EntityWrapper<UserEntity>(userEntity);
 		Page<UserEntity> page = userService.selectPage(query.toPage(), wrapper);

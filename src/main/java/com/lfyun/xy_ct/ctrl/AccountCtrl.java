@@ -25,7 +25,7 @@ public class AccountCtrl {
 	
 	@RequestMapping(value = "/list.json", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<DataWrapper<AccountEntity>> list(QueryDTO<AccountEntity> query) {
+	public Result<DataWrapper<AccountEntity>> list(@RequestBody QueryDTO<AccountEntity> query) {
 		AccountEntity entity = query.getQeury();
 		EntityWrapper<AccountEntity> wrapper = new EntityWrapper<AccountEntity>(entity);
 		Page<AccountEntity> page = accountService.selectPage(query.toPage(), wrapper);

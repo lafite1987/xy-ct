@@ -7,14 +7,18 @@ import lombok.Data;
 @Data
 public class QueryDTO<T> {
 
-	private int currentPage = 1;
-	private int pageSize = 15;
-	private int totalNum;
+	@Data
+	public static class PageInfo {
+		private int currentPage = 1;
+		private int pageSize = 15;
+		private int totalNum;
+	}
 	
+	private PageInfo page;
 	private T qeury;
 	
 	public Page<T> toPage() {
-		Page<T> page = new Page<>(currentPage, pageSize);
+		Page<T> page = new Page<>(this.page.currentPage, this.page.pageSize);
 		return page;
 	}
 }
