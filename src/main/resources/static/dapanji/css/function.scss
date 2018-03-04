@@ -1,0 +1,6 @@
+@function px2rem($px) {
+  @return ($px / 75) * 1 + rem;
+}
+
+$colorValue: #a52b27;
+$bigFontColor: #f61900;

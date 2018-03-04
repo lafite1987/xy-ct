@@ -1,0 +1,550 @@
+@import "function.scss";
+
+html, body {
+  height: 100%;
+}
+
+.pop-layer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .6);
+  z-index: 100;
+  display: none;
+  .content {
+    width: px2rem(600);
+    border-radius: px2rem(8);
+    background: #fff3c9;
+    border: 1px solid #e20004;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    $marginValue: px2rem(1);
+    text-align: center;
+    min-height: px2rem(710);
+    .juhui-one-img {
+      position: absolute;
+      top: -$marginValue;
+      left: -$marginValue;
+      z-index: 100;
+      width: px2rem(20);
+      height: px2rem(20);
+      transform: rotateY(0);
+    }
+
+    .juhui-two-img {
+      position: absolute;
+      top: -$marginValue;
+      right: -$marginValue;
+      z-index: 100;
+      width: px2rem(19);
+      height: px2rem(19);
+      transform: rotateY(180deg);
+    }
+
+    .juhui-three-img {
+      position: absolute;
+      bottom: -$marginValue;
+      right: -$marginValue;
+      z-index: 100;
+      width: px2rem(19);
+      height: px2rem(19);
+      transform: rotateY(0);
+    }
+
+    .juhui-four-img {
+      position: absolute;
+      bottom: -$marginValue;
+      left: -$marginValue;
+      z-index: 100;
+      width: px2rem(19);
+      height: px2rem(19);
+      transform: rotateY(180deg);
+    }
+    .active-rulr {
+      width: px2rem(420);
+      height: px2rem(36);
+      margin: px2rem(30) auto;
+    }
+    .flex-row {
+      display: flex;
+      font-size: px2rem(24);
+      color: #a52b27;
+      line-height: px2rem(42);
+      margin-bottom: px2rem(38);
+      .row-left {
+        padding-left: px2rem(42);
+      }
+      .row-right {
+        padding-left: px2rem(8);
+        padding-right: px2rem(42);
+        flex: 1;
+        text-align: left;
+      }
+    }
+  }
+  .share-content {
+    text-align: center;
+    .jiantou-div {
+      text-align: right;
+    }
+    .jiantou-img {
+      width: px2rem(116);
+      height: px2rem(118);
+      margin-top: px2rem(18);
+      margin-right: px2rem(96);
+    }
+    .wx-font-img {
+      width: px2rem(384);
+      height: px2rem(100);
+      margin-top: px2rem(150);
+      margin-bottom: px2rem(50);
+    }
+    .wx-img-img {
+      width: px2rem(298);
+      height: px2rem(114);
+    }
+    .close-page {
+      width: px2rem(90);
+      height: px2rem(90);
+      border: 2px solid #fff;
+      border-radius: 50%;
+      color: #fff;
+      margin: auto;
+      position: relative;
+      margin-top: px2rem(300);
+      &::before {
+        position: absolute;
+        width: 2px;
+        height: px2rem(70);
+        content: "";
+        background: #fff;
+        z-index: 100;
+        top: px2rem(10);
+        transform: rotate(45deg);
+
+      }
+      &::after {
+        position: absolute;
+        width: 2px;
+        height: px2rem(70);
+        content: "";
+        background: #fff;
+        z-index: 100;
+        top: px2rem(10);
+        transform: rotate(135deg);
+
+      }
+
+    }
+  }
+}
+
+.active-rule {
+  width: px2rem(120);
+  text-align: center;
+  border-radius: 0 px2rem(29) px2rem(29) 0;
+  height: px2rem(58);
+  line-height: px2rem(58);
+  position: absolute;
+  left: 0;
+  top: px2rem(20);
+  z-index: 100;
+  background: rgba(0, 0, 0, .4);
+  font-size: px2rem(24);
+  color: #fff;
+}
+
+.index-wrap {
+  width: px2rem(750);
+  min-height: 100%;
+  background: #b10101;
+  display: flex;
+  flex-direction: column;
+  font-size: 0;
+  .header {
+    margin: 0;
+    width: 100%;
+    .header-img {
+      width: 100%;
+    }
+  }
+  .center-body {
+    margin-top: -2px;
+    width: 100%;
+    flex: 1;
+    background: url("../img/center-bg.jpg") repeat-y;
+    background-size: 100% auto;
+    .juhui {
+      margin: 0 auto px2rem(60);
+      background: #fff3c9;
+      width: px2rem(600);
+      min-height: px2rem(150);
+      border-radius: px2rem(8);
+      position: relative;
+      $marginValue: px2rem(1);
+
+      .juhui-one-img {
+        position: absolute;
+        top: -$marginValue;
+        left: -$marginValue;
+        z-index: 100;
+        width: px2rem(20);
+        height: px2rem(20);
+        transform: rotateY(0);
+      }
+
+      .juhui-two-img {
+        position: absolute;
+        top: -$marginValue;
+        right: -$marginValue;
+        z-index: 100;
+        width: px2rem(19);
+        height: px2rem(19);
+        transform: rotateY(180deg);
+      }
+
+      .juhui-three-img {
+        position: absolute;
+        bottom: -$marginValue;
+        right: -$marginValue;
+        z-index: 100;
+        width: px2rem(19);
+        height: px2rem(19);
+        transform: rotateY(0);
+      }
+
+      .juhui-four-img {
+        position: absolute;
+        bottom: -$marginValue;
+        left: -$marginValue;
+        z-index: 100;
+        width: px2rem(19);
+        height: px2rem(19);
+        transform: rotateY(180deg);
+      }
+      .title-one {
+        height: px2rem(40);
+        margin: 0 auto;
+        padding: px2rem(18);
+        background: url("../img/title-one.png") center center no-repeat;
+      }
+      .content {
+        padding: 0 px2rem(44) px2rem(66);
+
+        color: $colorValue;
+        font-size: px2rem(24);
+        line-height: px2rem(54);
+        .big-font {
+          font-size: px2rem(30);
+          color: $bigFontColor;
+        }
+      }
+      .btn {
+        display: block;
+        width: px2rem(432);
+        height: px2rem(92);
+        line-height: px2rem(92);
+        background: url("../img/btn.png") center center no-repeat;
+        background-size: px2rem(430) px2rem(92);
+        position: absolute;
+        z-index: 100;
+        margin-left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: px2rem(30);
+        color: #fff;
+        text-align: center;
+        letter-spacing: px2rem(2);
+      }
+    }
+    .share-users {
+      text-align: center;
+      font-size: px2rem(30);
+      color: #fff;
+      letter-spacing: px2rem(4);
+      margin-top: px2rem(38);
+      .invent{
+        display: inline-block;
+      }
+      .share-line-right {
+        transform: rotateY(180deg);
+      }
+    }
+    .address {
+      font-size: px2rem(24);
+      color: #ffc401;
+      text-align: center;
+      padding: 0 px2rem(78);
+      line-height: px2rem(40);
+      margin-top: px2rem(40);
+      table-layout: fixed;
+      word-break: break-all;
+    }
+  }
+  .bottom-body {
+    width: 100%;
+    height: px2rem(96);
+    background: url("../img/bottom.jpg") no-repeat;
+    background-size: 100% px2rem(96);
+  }
+
+}
+
+.list-wrap {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #cf321a;
+  display: flex;
+  flex-direction: column;
+  .income-header {
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    .balance {
+      display: flex;
+      flex-direction: row;
+      line-height: px2rem(60);
+      color: #fff;
+      .left {
+        text-align: left;
+        padding-left: px2rem(30);
+        flex: 1;
+      }
+      .right {
+        text-align: right;
+        flex: 1;
+        padding-right: px2rem(30);
+      }
+    }
+    .income-name {
+      width: 100%;
+      padding-top: px2rem(50);
+      font-size: px2rem(30);
+    }
+    .money-all {
+      width: 100%;
+      padding: px2rem(38) 0 px2rem(58) 0;
+      font-size: px2rem(80);
+
+    }
+  }
+  .list-header {
+    background: url("../img/header-list.jpg") center center no-repeat;
+    background-size: 100% px2rem(62);
+    height: px2rem(62);
+  }
+
+  .list-con {
+    flex: 1;
+    border-radius: 0 0 px2rem(6) px2rem(6);
+    height: 100%;
+    overflow: scroll;
+    .list-details {
+      height: 100%;
+      overflow: scroll;
+      width: px2rem(660);
+      margin: 0 auto;
+      background: #fff3c9;
+      border-radius: 0 0 px2rem(6) px2rem(6);
+      color: #ce3a29;
+      text-align: center;
+      .first-users, .second-users, .three-users {
+        padding: 0 px2rem(60);
+        line-height: px2rem(64);
+        .money {
+          font-size: px2rem(24);
+        }
+      }
+      .get-px {
+        width: px2rem(80);
+      }
+      .img-list {
+        font-size: 0;
+        .more {
+          display: inline-block;
+          width: px2rem(62);
+          height: px2rem(62);
+          border: 1px solid #fbe4bb;
+          border-radius: 50%;
+          background: url("../img/jiantou-red.png") center center no-repeat;
+          background-size: px2rem(16) px2rem(30);
+        }
+        .more-close {
+          display: inline-block;
+          width: px2rem(62);
+          height: px2rem(62);
+          border: 1px solid #fbe4bb;
+          border-radius: 50%;
+          background: url("../img/jiantou-red.png") center center no-repeat;
+          background-size: px2rem(16) px2rem(30);
+          transform: rotate(90deg);
+        }
+      }
+      .img-list.img-little {
+        img, div {
+          width: px2rem(84);
+          height: px2rem(84);
+          border-radius: 50%;
+          border: 1px solid #fbe4bb;
+          margin-right: px2rem(30);
+        }
+      }
+      .img-list.img-more {
+        text-align: left;
+        img, div {
+          width: px2rem(62);
+          height: px2rem(62);
+          border-radius: 50%;
+          border: 1px solid #fbe4bb;
+          margin-right: px2rem(20);
+        }
+      }
+    }
+  }
+  .bottom-space {
+    height: px2rem(100);
+  }
+
+}
+
+.pay-wrap {
+  background: #fafafa;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  $paddingValue: px2rem(30);
+  .header {
+    flex: 1;
+    .pay-style {
+      font-size: px2rem(30);
+      color: #666666;
+      height: px2rem(90);
+      line-height: px2rem(90);
+      padding: 0 $paddingValue;
+    }
+    .wx-pay {
+      padding: 0 $paddingValue;
+      line-height: px2rem(90);
+      font-size: px2rem(30);
+      margin-bottom: px2rem(30);
+      color: #333;
+      background: url("../img/wx-banner.png") 0 center no-repeat #fff;
+      background-size: px2rem(36) px2rem(36);
+      background-origin: content-box;
+      .wx-font {
+        margin-left: px2rem(50);
+        background: url("../img/choosed.png") center right no-repeat;
+        background-origin: content-box;
+        background-size: px2rem(36) px2rem(36);
+      }
+
+    }
+    .pay-title {
+      background: #fff;
+      height: px2rem(90);
+      line-height: px2rem(90);
+      font-size: px2rem(30);
+      color: #000;
+      font-weight: 10;
+      padding: 0 $paddingValue;
+    }
+    .money {
+      font-size: px2rem(60);
+      color: #333333;
+      padding: 0 $paddingValue;
+      background: #fff;
+      .num {
+        border-bottom: 1px solid #eeeeee;
+        .money-num {
+          font-size: px2rem(40);
+        }
+      }
+    }
+    .balance {
+      font-size: px2rem(24);
+      color: #999999;
+      height: px2rem(90);
+      line-height: px2rem(90);
+      background: #fff;
+      padding: 0 px2rem(30);
+    }
+  }
+  .pay-bottom {
+    background: #fff;
+    height: px2rem(120);
+    borde-top: 1px solid #eeeeee;
+    display: flex;
+    flex-direction: row;
+    .left {
+      line-height: px2rem(120);
+      padding-left: $paddingValue;
+      text-align: left;
+      flex: 1;
+      font-size: px2rem(30);
+      .symblo {
+        color: #cf321a;
+      }
+      .money {
+        color: #cf321a;
+        font-size: px2rem(48);
+      }
+    }
+    .right {
+      text-align: right;
+      padding-right: $paddingValue;
+      .btn {
+        width: px2rem(240);
+        margin-top: px2rem(15);
+        text-align: center;
+        height: px2rem(90);
+        line-height: px2rem(90);
+        border-radius: px2rem(45);
+        background: #cf321a;
+        color: #fff;
+        font-size: px2rem(30);
+      }
+    }
+  }
+
+}
+
+.record-wrap {
+  height: 100%;
+  background: #fafafa;
+  font-size: px2rem(24);
+  display: flex;
+  flex-direction: column;
+  .record-con {
+    padding: px2rem(30);
+    background: #fff;
+    flex: 1;
+    border-bottom: 1px solid #eee;
+    .record-item {
+      line-height: px2rem(50);
+      border-bottom: 1px solid #eeeeee;
+      display: flex;
+      flex-direction: row;
+      .left {
+        text-align: left;
+        flex: 1;
+      }
+      .right {
+        text-align: right;
+      }
+
+    }
+  }
+  .record-bottom {
+    padding: 0 px2rem(30);
+    height: px2rem(120);
+    line-height: px2rem(120);
+    text-align: right;
+    color:#cf321a;
+    font-size: px2rem(24);
+  }
+
+}

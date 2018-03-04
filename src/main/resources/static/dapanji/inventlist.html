@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>大盘鸡</title>
+    <link rel="stylesheet" href="css/all.css"/>
+    <link rel="stylesheet" href="css/animate.css"/>
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+</head>
+<body onload="load()">
+<div class="list-wrap">
+    <div class="income-header">
+        <div class="balance">
+            <div class="left">未提现：</div>
+            <div class="right" onclick="linkToRecord()">提现明细</div>
+        </div>
+
+        <div class="income-name">总收益（元）</div>
+        <div class="money-all">395</div>
+    </div>
+    <div>
+
+
+    </div>
+    <div class="list-header">
+        <!--<div class="con"></div>-->
+    </div>
+    <div class="list-con">
+        <div class="list-details">
+            <div class="first-users">
+                <img src="./img/first.png" class="first-img"/>
+                <div>已邀请4人，共获得奖励<span class="money">120</span>元</div>
+                <div class="get-px" id="getPx"></div>
+                <div class="img-list " id="firstList">
+
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<div class="more" id="firstMore"></div>-->
+
+                </div>
+            </div>
+            <div class="second-users">
+                <img src="./img/second.png" class="first-img"/>
+                <div>已邀请4人，共获得奖励<span class="money">120</span>元</div>
+                <div class="img-list" id="secondList">
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<div class="more" id="secondMore"></div>-->
+                </div>
+            </div>
+            <div class="three-users">
+                <img src="./img/three.png" class="first-img"/>
+                <div>已邀请4人，共获得奖励<span class="money">120</span>元</div>
+                <div class="img-list" id="thirdList">
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<div class="more" id="thirdMore"></div>-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-space"></div>
+
+</div>
+
+<script>
+    function linkToRecord() {
+        window.location.href = "withdrawrecord.html";
+    }
+    var data = [["img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg"], ["img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg"], ["img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg", "img/user.jpg"]];
+
+    var indexToPosition = ["first", "second", "third"];
+    var eleWidth = 0;
+    var maxnum = 0;
+    function load() {
+        eleWidth = document.getElementById('firstList').offsetWidth;
+        chuWidth = document.getElementById('getPx').offsetWidth;
+        maxnum = Math.floor(eleWidth / chuWidth);
+//        console.log("最多的图数" + maxnum);
+        data.forEach(function (item, index, array) {
+            doList(indexToPosition[index], item);
+        })
+    }
+    function doList(position, item) {
+        var ele = document.getElementById(position + 'List');
+        var isNeedJiantou = false;
+        if (item instanceof Array && item.length != 0) {
+            if (item.length > 4) {
+                ele.className += ' img-more'
+            } else {
+                ele.className += ' img-little'
+            }
+            if (item.length > maxnum) {
+                item = item.slice(0, maxnum - 1);
+                isNeedJiantou = true
+            }
+            appendImgs(item, ele);
+            if (isNeedJiantou) {
+                addMoreBtn(position, ele);
+
+            }
+        }
+    }
+    //增加more的按钮
+    function addMoreBtn(position, ele) {
+        var moreEle = document.createElement("div");
+        moreEle.className = 'more';
+        moreEle.setAttribute('id', position + 'More');
+        moreEle.onclick = function () {
+            clickMore(position, ele)
+        }
+
+        ele.appendChild(moreEle);
+
+    }
+    //增加关闭More的按钮
+    function addCloseMore(position, ele) {
+        var moreEle = document.createElement("div");
+        moreEle.className = 'more-close';
+        moreEle.setAttribute('id', position + 'CloseMore');
+        moreEle.onclick = function () {
+            closeMore(position, ele)
+        }
+        ele.appendChild(moreEle);
+    }
+    //添加imgs
+    function appendImgs(imgs, ele) {
+        imgs.forEach(function (img, index, array) {
+            var imgEle = document.createElement("img");
+            imgEle.src = img;
+            ele.appendChild(imgEle);
+        });
+    }
+    function getIndex(value) {
+        var ind = -1;
+        indexToPosition.forEach(function (item, index, array) {
+//            console.log(value + "----" + item);
+            if (item == value) {
+                ind = index;
+            }
+        });
+        return ind;
+    }
+    function clickMore(position, ele) {
+        while (ele.hasChildNodes()) {
+            ele.removeChild(ele.firstChild);
+        }
+        var index = getIndex(position);
+        var thisImgsData = data[index];
+        appendImgs(thisImgsData, ele);
+        addCloseMore(position, ele);
+
+    }
+    function closeMore(position, ele) {
+        while (ele.hasChildNodes()) {
+            ele.removeChild(ele.firstChild);
+        }
+        var index = getIndex(position);
+        listData = data[index].slice(0, maxnum - 1);
+        appendImgs(listData, ele);
+        addMoreBtn(position, ele);
+    }
+</script>
+</body>
+</html>
