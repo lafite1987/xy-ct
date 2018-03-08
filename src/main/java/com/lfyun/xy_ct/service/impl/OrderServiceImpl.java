@@ -28,6 +28,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderEntity> imple
 		orderEntity.setPayFinishTime(orderDTO.getPayFinishTime());
 		orderEntity.setPayStatus(PayStatusEnums.FINISH.getCode());
 		this.updateById(orderEntity);
+		userService.addUserBalance(orderEntity.getUserId(), orderDTO.getOrderAmount().doubleValue());
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lfyun.xy_ct.common.enums.ExceptionCodeEnums;
+import com.lfyun.xy_ct.common.enums.PayStatusEnums;
 import com.lfyun.xy_ct.common.util.JsonUtils;
 import com.lfyun.xy_ct.common.util.MathUtils;
 import com.lfyun.xy_ct.dto.OrderDTO;
@@ -65,7 +66,10 @@ public class PayServiceImpl implements PayService {
             log.error("【异步通知】订单不存在，orderId={}" , payResponse.getOrderId());
             throw new AppException(ExceptionCodeEnums.ORDER_NOT_FOUND);
         }
-
+        //订单已完成
+        if(orderDTO.getPayStatus() == PayStatusEnums.FINISH.getCode()) {
+        	return payResponse;
+        }
         //3.判断订单有效性
         //3.1判断签名 best-sdk 已经处理好
         //3.2判断支付状态 best-sdk 已经处理好
