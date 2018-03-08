@@ -10,17 +10,17 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.google.common.collect.Maps;
 import com.lfyun.xy_ct.common.wx.WeiXinResultXMLBean;
 import com.lfyun.xy_ct.entity.UserEntity;
-import com.lfyun.xy_ct.entity.WithdrawEntity;
+import com.lfyun.xy_ct.entity.UserEarningEntity;
 import com.lfyun.xy_ct.mapper.UserMapper;
 import com.lfyun.xy_ct.service.UserService;
 import com.lfyun.xy_ct.service.WeixinFirmPaymentService;
-import com.lfyun.xy_ct.service.WithdrawService;
+import com.lfyun.xy_ct.service.UserEarningService;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implements UserService {
 
 	@Autowired
-	private WithdrawService withdrawService;
+	private UserEarningService withdrawService;
 	
 	@Autowired
 	private WeixinFirmPaymentService weixinFirmPaymentService;
@@ -45,7 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implemen
 	public void withdraw(Long userId) {
 		UserEntity userEntity = selectById(userId);
 		if(userEntity != null && userEntity.getEarning() > 0) {
-			WithdrawEntity withdrawEntity = new WithdrawEntity();
+			UserEarningEntity withdrawEntity = new UserEarningEntity();
 			withdrawEntity.setUserId(userId);
 			withdrawEntity.setAmount(userEntity.getEarning());
 			withdrawEntity.setState(1);
@@ -53,12 +53,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implemen
 			String tradeNo = String.valueOf(withdrawEntity.getId());
 			WeiXinResultXMLBean weiXinResultXMLBean = weixinFirmPaymentService.firmPay(userEntity.getOpenid(), userEntity.getEarning(), "收益提现", tradeNo);
 			if("SUCCESS".equals(weiXinResultXMLBean.getReturn_code()) && "SUCCESS".equals(weiXinResultXMLBean.getResult_code())) {
-				WithdrawEntity updateWithdrawEntity = new WithdrawEntity();
+				UserEarningEntity updateWithdrawEntity = new UserEarningEntity();
 				updateWithdrawEntity.setId(withdrawEntity.getId());
 				updateWithdrawEntity.setState(3);
 				withdrawService.updateById(updateWithdrawEntity);
 			} else {
-				WithdrawEntity updateWithdrawEntity = new WithdrawEntity();
+				UserEarningEntity updateWithdrawEntity = new UserEarningEntity();
 				updateWithdrawEntity.setId(withdrawEntity.getId());
 				updateWithdrawEntity.setState(4);
 				withdrawService.updateById(updateWithdrawEntity);

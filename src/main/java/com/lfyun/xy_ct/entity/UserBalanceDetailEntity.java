@@ -22,6 +22,8 @@ public class UserBalanceDetailEntity {
     private Long id;
 	
 	private Long userId;
+	
+	private transient String nickname;
 	/**
 	 * 金额
 	 */
@@ -35,7 +37,7 @@ public class UserBalanceDetailEntity {
 	 */
 	private Integer type;
 	/**
-	 * 业务类型：1-充值；2-到店消费
+	 * 业务类型：1-充值；2-到店消费；3-退款
 	 */
 	private Integer businessType;
 	/**
