@@ -12,6 +12,7 @@ import com.lfyun.xy_ct.entity.OrderEntity;
 import com.lfyun.xy_ct.entity.UserEntity;
 import com.lfyun.xy_ct.mapper.OrderMapper;
 import com.lfyun.xy_ct.service.OrderService;
+import com.lfyun.xy_ct.service.UserEarningService;
 import com.lfyun.xy_ct.service.UserService;
 
 @Service
@@ -19,6 +20,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderEntity> imple
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserEarningService userEarningService;
 	
 	@Override
 	public void pay(OrderDTO orderDTO) {
@@ -29,6 +33,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderEntity> imple
 		orderEntity.setPayStatus(PayStatusEnums.FINISH.getCode());
 		this.updateById(orderEntity);
 		userService.addUserBalance(orderEntity.getUserId(), orderDTO.getOrderAmount().doubleValue());
+		userEarningService.addEarning(orderEntity.getId());
 	}
 
 	@Override

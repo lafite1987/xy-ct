@@ -1,13 +1,106 @@
 package com.lfyun.xy_ct.service.impl;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lfyun.xy_ct.entity.OrderEntity;
+import com.lfyun.xy_ct.entity.ProductShareUserEntity;
 import com.lfyun.xy_ct.entity.UserEarningEntity;
 import com.lfyun.xy_ct.mapper.UserEarningMapper;
+import com.lfyun.xy_ct.service.OrderService;
+import com.lfyun.xy_ct.service.ProductShareUserService;
 import com.lfyun.xy_ct.service.UserEarningService;
 
 @Service
 public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEarningEntity> implements UserEarningService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserEarningServiceImpl.class);
+	
+	@Autowired
+	private OrderService orderService;
+	
+	@Autowired
+	private ProductShareUserService productShareUserService;
+	
+	public void addEarning(Long orderId) {
+		OrderEntity orderEntity = orderService.selectById(orderId);
+		if(orderEntity == null) {
+			LOGGER.warn("订单:{}没有找到", orderId);
+			return;
+		}
+		Long fromUserId = orderEntity.getUserId();
+		ProductShareUserEntity productShareUserEntity = new ProductShareUserEntity();
+		productShareUserEntity.setProductId(orderEntity.getProductId());
+		
+		//给fromUserId的邀请人发收益
+		productShareUserEntity.setUserId(fromUserId);
+		productShareUserEntity.setLevel(1);
+		EntityWrapper<ProductShareUserEntity> wrapper = new EntityWrapper<ProductShareUserEntity>(productShareUserEntity);
+		ProductShareUserEntity parent = productShareUserService.selectOne(wrapper);
+		if(parent == null) {
+			LOGGER.warn("未找到用户:{}的邀请人", fromUserId);
+			return;
+		}
+		if(isAdd(parent.getParentUserId(), orderId)) {
+			addEarningRecord(parent.getParentUserId(), fromUserId, orderId, 30D);
+			productShareUserService.addEarning(parent.getId(), 30D);
+		}
+		
+		//给fromUserId的邀请人的邀请人发收益
+		productShareUserEntity.setUserId(parent.getParentUserId());
+		ProductShareUserEntity grandfather = productShareUserService.selectOne(wrapper);
+		if(grandfather == null) {
+			LOGGER.warn("未找到用户:{}的邀请人:{}的邀请人", fromUserId, parent.getParentUserId());
+		}
+		if(isAdd(grandfather.getParentUserId(), orderId)) {
+			addEarningRecord(grandfather.getParentUserId(), fromUserId, orderId, 20D);
+			productShareUserService.addEarning(grandfather.getId(), 20D);
+		}
+		
+		//给fromUserId的邀请人的邀请人的邀请人发收益
+		productShareUserEntity.setUserId(grandfather.getParentUserId());
+		ProductShareUserEntity greatGrandfather = productShareUserService.selectOne(wrapper);
+		if(greatGrandfather == null) {
+			LOGGER.warn("未找到用户:{}的邀请人:{}的邀请人", fromUserId, grandfather.getParentUserId());
+		}
+		if(isAdd(greatGrandfather.getParentUserId(), orderId)) {
+			addEarningRecord(greatGrandfather.getParentUserId(), fromUserId, orderId, 10D);
+			productShareUserService.addEarning(greatGrandfather.getId(), 10D);
+		}
+	}
+	
+	private void addEarningRecord(Long userId, Long fromUserId, Long orderId, Double amount) {
+		UserEarningEntity userEarningEntity = new UserEarningEntity();
+		userEarningEntity.setUserId(userId);
+		userEarningEntity.setFromUserId(fromUserId);
+		userEarningEntity.setOrderId(orderId);
+		userEarningEntity.setAmount(amount);
+		userEarningEntity.setType(1);
+		userEarningEntity.setState(0);
+		this.insert(userEarningEntity);
+	}
+	
+	private boolean isAdd(Long userId, Long orderId) {
+		UserEarningEntity entity = new UserEarningEntity();
+		entity.setUserId(userId);
+		entity.setOrderId(orderId);
+		EntityWrapper<UserEarningEntity> wrapper = new EntityWrapper<UserEarningEntity>(entity);
+		UserEarningEntity userEarningEntity = this.selectOne(wrapper);
+		return userEarningEntity == null ? true : false;
+	}
+
+	@Override
+	public List<UserEarningEntity> list(Long userId) {
+		UserEarningEntity entity = new UserEarningEntity();
+		entity.setUserId(userId);
+		EntityWrapper<UserEarningEntity> wrapper = new EntityWrapper<UserEarningEntity>(entity);
+		List<UserEarningEntity> list = this.baseMapper.selectList(wrapper);
+		return list;
+	}
 }

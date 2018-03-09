@@ -3,20 +3,38 @@
 <head> 
 <meta charset="utf-8" /> 
 <title>测试支付</title> 
+    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css}"/>
+    <link rel="stylesheet" href="../static/dapanji/css/animate.css" th:href="@{/dapanji/css/animate.css}"/>
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 </head> 
 <body> 
-  <div class="index_box"> 
-    <div class="apply_name">微信js支付测试</div> 
-    <div class="branch_con"> 
-      <ul> 
-        <li><span class="name">测试支付信息</span></li> 
-      </ul>
-      <h1 th:text="${orderId}">订单Id</h1>
-      <input id="orderId" th:value="${orderId}" type="hidden"/>
-      <p class="cz_btn"><a href="#" th:href="@{javascript:pay();}" class="btn_1">立即支付</a></p> 
-    </div> 
-    <div id="myConsole"></div>
-  </div> 
+  <div class="pay-wrap">
+    <div class="header">
+        <h1 th:text="${orderId}">订单号</h1>
+        <div class="pay-style">选择支付方式</div>
+        <div class="wx-pay">
+            <div class="wx-font">微信支付</div>
+        </div>
+        <div class="pay-title">充值金额:</div>
+        <input id="orderId" th:value="${orderId}" type="hidden"/>
+        <div class="money"><div class="num"><span class="money-num">￥</span><span th:text="${amount}">398</span></div></div>
+        <div class="balance">可用余额:&nbsp;&nbsp;0元</div>
+    </div>
+    <!--<div class="pay-style">选择支付方式</div>-->
+    <!--<div class="wx-pay">-->
+        <!--<div class="wx-font">微信支付</div>-->
+    <!--</div>-->
+    <!--<div class="pay-title">充值金额:</div>-->
+    <!--<div class="money"><div class="num"><span class="money-num">￥</span> 398</div></div>-->
+    <!--<div class="balance">可用余额:&nbsp;&nbsp;0元</div>-->
+    <div class="pay-bottom">
+        <div class="left">实付金额：<span class="symblo">￥</span><span class="money" th:text="${amount}">398</span></div>
+        <div class="right">
+            <div class="btn" onclick="pay()">立即充值</div>
+        </div>
+
+    </div>
+    </div>
 </body> 
 <script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" th:src="@{http://res.wx.qq.com/open/js/jweixin-1.2.0.js}"></script>

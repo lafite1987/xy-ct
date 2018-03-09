@@ -1,19 +1,89 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"> 
-<head> 
-<meta charset="utf-8" /> 
-<title>活动页</title>
-<script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" th:src="@{http://res.wx.qq.com/open/js/jweixin-1.2.0.js}"></script>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>大盘鸡</title>
+    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css}"/>
+    <link rel="stylesheet" href="../static/dapanji/css/animate.css" th:href="@{/dapanji/css/animate.css}"/>
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+    <script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" th:src="@{http://res.wx.qq.com/open/js/jweixin-1.2.0.js}"></script>
 </head>
 <body>
-<div>
-<form action="/wxp/order/create" method="GET">
-<input type="hidden" id="productId" name="productId" th:value="${productId}" />
-<input type="submit" value="充值" width="200" height="200"/>
-</form>
+<div class="index-wrap">
+    <div class="header">
+        <img src="../static/dapanji/img/header.png" th:src="@{/dapanji/img/header.png}" class="header-img"/>
+    </div>
+    <div class="center-body">
+        <!--<div class="zhuanqian-title"></div>-->
+        <div class="juhui">
+            <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-one-img"/>
+            <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-two-img"/>
+            <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-three-img"/>
+            <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-four-img"/>
+            <div class="title-one"></div>
+            <div class="content">充值398元，全部可用于消费，还可<span class="big-font">额外获赠</span>“价值68元的大盘鸡”一份哦！</div>
+            <input type="hidden" id="productId" name="productId" th:value="${productId}" />
+            <div class="btn" onclick="linkToreCharge()">立即充值</div>
+        </div>
+        <div class="share-users">
+            <img src="../static/dapanji/img/two-line.png" th:src="@{/dapanji/img/two-line.png}" class="share-line"/>
+            <div class="invent" onclick="linkToRechargeList()">充值账单</div>
+            <img src="../static/dapanji/img/two-line.png" th:src="@{/dapanji/img/two-line.png}" class="share-line-right"/>
+        </div>
+        <div class="juhui">
+            <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-one-img"/>
+            <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-two-img"/>
+            <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-three-img"/>
+            <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-four-img"/>
+            <div class="title-one"></div>
+            <div class="content">将此优惠分享给其他好友，并教会他们也分享出去，不仅让大家共享如此钜惠，更能让大家一起来<span class="big-font">免费吃！吃！吃！</span></div>
+            <div class="btn" onclick="showShareLayer()">邀请好友，拿奖励</div>
+        </div>
+        <div class="share-users">
+            <img src="../static/dapanji/img/two-line.png" th:src="@{/dapanji/img/two-line.png}" class="share-line"/>
+            <div class="invent" onclick="linkToList()">我邀请的新用户</div>
+            <img src="../static/dapanji/img/two-line.png" th:src="@{/dapanji/img/two-line.png}" class="share-line-right"/>
+        </div>
+        <div class="address">
+            店铺地址：永州万达广场西域新疆主题餐厅XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        </div>
+    </div>
+    <div class="bottom-body">1111111111111111111111</div>
 </div>
-<div id="myConsole"></div>
+<div class="active-rule" onclick="showActiveLayer()">活动规则</div>
+<div class="pop-layer" onclick="closeActiveLayer()" id="activeLayer">
+    <div class="content">
+        <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-one-img"/>
+        <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-two-img"/>
+        <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-three-img"/>
+        <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-four-img"/>
+        <img src="../static/dapanji/img/active-rule.png" th:src="@{/dapanji/img/active-rule.png}" class="active-rulr"/>
+        <div class="flex-row">
+            <div class="row-left">1.</div>
+            <div class="row-right">充值398元，全部可用于消费，还可额外获赠“价值68元的大盘鸡”一份哦！</div>
+        </div>
+        <div class="flex-row">
+            <div class="row-left">2.</div>
+            <div class="row-right">分享出去，分享好友通过您分享的链接进行充值，则可以返现金给你哦！如果您的好友分享出去也进行了充值，您还可以伙嘚返利哦！</div>
+        </div>
+
+    </div>
+</div>
+<div class="pop-layer" id="shareLayer">
+    <div class="share-content">
+        <div class="jiantou-div"><img src="../static/dapanji/img/jiantou.png" th:src="@{/dapanji/img/jiantou.png}" class="jiantou-img"/></div>
+        <div class="wx-font">
+            <img src="../static/dapanji/img/share-font.png" th:src="@{/dapanji/img/share-font.png}" class="wx-font-img"/>
+        </div>
+        <div class="wx-img">
+            <img src="../static/dapanji/img/share-img.png" th:src="@{/dapanji/img/share-img.png}" class="wx-img-img"/>
+        </div>
+        <div class="close-page" onclick="closeShareLayer()"></div>
+
+    </div>
+</div>
+</div>
 </body>
-<script src="../static/js/recharge.js" th:src="@{/js/recharge.js}"></script>
+<script src="../static/js/recharge.js" th:src="@{/js/recharge.js?v=124}"></script>
 </html>

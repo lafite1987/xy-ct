@@ -15,7 +15,7 @@ public class QueryDTO<T> {
 	}
 	
 	private PageInfo page;
-	private T qeury;
+	private T query;
 	
 	public Page<T> toPage() {
 		Page<T> page = new Page<>(this.page.currentPage, this.page.pageSize);

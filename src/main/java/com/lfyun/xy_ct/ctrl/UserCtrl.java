@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +37,7 @@ public class UserCtrl {
 	@RequestMapping(value = "/list.json", method = RequestMethod.POST)
 	@ResponseBody
 	public Result<DataWrapper<UserEntity>> list(@RequestBody QueryDTO<UserEntity> query) {
-		UserEntity userEntity = query.getQeury();
+		UserEntity userEntity = query.getQuery();
 		EntityWrapper<UserEntity> wrapper = new EntityWrapper<UserEntity>(userEntity);
 		Page<UserEntity> page = userService.selectPage(query.toPage(), wrapper);
 		DataWrapper<UserEntity> dataWrapper = new DataWrapper<>();
@@ -47,10 +48,14 @@ public class UserCtrl {
 		return result;
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public Result<Void> update(UserEntity form) {
+	@RequestMapping(value = "/update.json", method = RequestMethod.POST)
+	@ResponseBody
+	public Result<Void> update(@RequestBody UserEntity form) {
 		Result<Void> result = Result.success();
-		userService.updateById(form);
+		UserEntity userEntity = new UserEntity();
+		userEntity.setId(form.getId());
+		userEntity.setUserType(form.getUserType());
+		userService.updateById(userEntity);
 		return result;
 	}
 	
@@ -62,6 +67,15 @@ public class UserCtrl {
 		if(user != null) {
 			userService.withdraw(user.getId());
 		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/id/{id}/detail.json", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<UserEntity> detail(@PathVariable Long id, HttpServletRequest request) {
+		Result<UserEntity> result = Result.success();
+		UserEntity userEntity = userService.selectById(id);
+		result.setData(userEntity);
 		return result;
 	}
 	

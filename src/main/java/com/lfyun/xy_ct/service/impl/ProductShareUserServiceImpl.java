@@ -82,4 +82,9 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 		}
 	}
 
+	@Override
+	public void addEarning(Long id, Double earning) {
+		this.baseMapper.addEarning(id, earning);
+	}
+
 }

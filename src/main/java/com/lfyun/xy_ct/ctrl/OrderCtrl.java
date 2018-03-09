@@ -26,8 +26,9 @@ import com.lfyun.xy_ct.common.User;
 import com.lfyun.xy_ct.common.enums.PayStatusEnums;
 import com.lfyun.xy_ct.configure.wx.ProjectUrlConfig;
 import com.lfyun.xy_ct.entity.OrderEntity;
-import com.lfyun.xy_ct.entity.UserEntity;
+import com.lfyun.xy_ct.entity.ProductEntity;
 import com.lfyun.xy_ct.service.OrderService;
+import com.lfyun.xy_ct.service.ProductService;
 import com.lfyun.xy_ct.service.ProductShareUserService;
 import com.lfyun.xy_ct.service.SessionManager;
 
@@ -52,6 +53,9 @@ public class OrderCtrl {
 	private OrderService orderService;
 	
 	@Autowired
+	private ProductService productService;
+	
+	@Autowired
 	private ProductShareUserService productShareUserService;
 	
 	@RequestMapping(value = "/order/create", method = RequestMethod.GET)
@@ -64,15 +68,17 @@ public class OrderCtrl {
 	        String redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAUTH2_SCOPE_USER_INFO, URLEncoder.encode(returnUrl));
 			return "redirect:" + redirectUrl;
 		}
+		ProductEntity productEntity = productService.selectById(productId);
 		OrderEntity orderEntity = new OrderEntity();
 		orderEntity.setProductId(productId);
-		orderEntity.setProductName("充值398元");
-		orderEntity.setAmount(0.01D);
+		orderEntity.setProductName(productEntity.getTitle());
+		orderEntity.setAmount(productEntity.getPrice());
 		orderEntity.setUserId(user.getId());
 		orderEntity.setPayStatus(PayStatusEnums.NEW.getCode());
 		orderService.insert(orderEntity);
 		
 		model.addAttribute("orderId", orderEntity.getId());
+		model.addAttribute("amount", orderEntity.getAmount());
 		return "redirect:/order-detail.htm?orderId=" + orderEntity.getId();
 	}
 	
@@ -87,6 +93,7 @@ public class OrderCtrl {
 	        String redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAUTH2_SCOPE_USER_INFO, URLEncoder.encode(returnUrl));
 			return "redirect:" + redirectUrl;
 		}
+		ProductEntity productEntity = productService.selectById(productId);
 		if(StringUtils.isNotBlank(from)) {
 			try {
 				Long parentUserId = Long.parseLong(from);
@@ -96,6 +103,7 @@ public class OrderCtrl {
 			}
 		}
 		model.addAttribute("productId", productId);
+		model.addAttribute("price", productEntity.getPrice());
 		return "recharge";
 	}
 	
@@ -103,6 +111,7 @@ public class OrderCtrl {
 	public String detail(Long orderId, Model model) {
 		OrderEntity orderEntity = orderService.selectById(orderId);
 		model.addAttribute("orderId", orderEntity.getId());
+		model.addAttribute("amount", orderEntity.getAmount());
 		return "order-detail";
 	}
 	
@@ -130,7 +139,7 @@ public class OrderCtrl {
 	@RequestMapping(value = "/order/list.json", method = RequestMethod.POST)
 	@ResponseBody
 	public Result<DataWrapper<OrderEntity>> list(@RequestBody QueryDTO<OrderEntity> query) {
-		OrderEntity entity = query.getQeury();
+		OrderEntity entity = query.getQuery();
 		EntityWrapper<OrderEntity> wrapper = new EntityWrapper<OrderEntity>(entity);
 		Page<OrderEntity> page = orderService.selectPage(query.toPage(), wrapper);
 		DataWrapper<OrderEntity> dataWrapper = new DataWrapper<>();

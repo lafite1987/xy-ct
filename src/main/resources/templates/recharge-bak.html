@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"> 
+<head> 
+<meta charset="utf-8" /> 
+<title>活动页</title>
+<script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" th:src="@{http://res.wx.qq.com/open/js/jweixin-1.2.0.js}"></script>
+</head>
+<body>
+<div>
+<form action="/wxp/order/create" method="GET">
+<input type="hidden" id="productId" name="productId" th:value="${productId}" />
+<input type="submit" value="充值" width="200" height="200"/>
+</form>
+</div>
+<div id="myConsole"></div>
+</body>
+<script src="../static/js/recharge.js" th:src="@{/js/recharge.js}"></script>
+</html>

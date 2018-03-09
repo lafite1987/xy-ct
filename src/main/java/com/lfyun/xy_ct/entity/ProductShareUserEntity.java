@@ -35,7 +35,10 @@ public class ProductShareUserEntity {
 	 * 1-一级；2-二级；3-三级；
 	 */
 	private Integer level;
-	
+	/**
+	 * 收益金额
+	 */
+	private Double earning;
 	@TableField(fill = FieldFill.INSERT, value="createTime", strategy = FieldStrategy.IGNORED)
 	private Long createTime;
 	

@@ -15,7 +15,9 @@ public class ProductEntity {
 	@TableId(value="id")
 	private Long id;
 	
-	private String name;
+	private String title;
+	
+	private String description;
 	
 	private Double price;
 	

@@ -1,3 +1,30 @@
+function linkToRechargeList(){
+        window.location.href = "rechargerecord.html";
+    }
+    function linkToList(){
+        window.location.href = "inventlist.html";
+    }
+    function linkToreCharge() {
+    	var productId = $("#productId").val();
+    	alert(productId);
+        window.location.href = "order/create?productId=" + productId;
+    }
+    function showActiveLayer() {
+        var visible = document.getElementById("activeLayer").style.display = 'block';
+        console.log(visible);
+    }
+    function closeActiveLayer() {
+        var visible = document.getElementById("activeLayer").style.display = 'none';
+        console.log(visible);
+    }
+    function showShareLayer() {
+        var visible = document.getElementById("shareLayer").style.display = 'block';
+        console.log(visible);
+    }
+    function closeShareLayer() {
+        var visible = document.getElementById("shareLayer").style.display = 'none';
+        console.log(visible);
+    }
 function appendConsole (val) {
     $('#myConsole').append(val).append('<br />')
 }

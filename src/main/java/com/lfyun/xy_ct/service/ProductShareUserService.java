@@ -6,4 +6,10 @@ import com.lfyun.xy_ct.entity.ProductShareUserEntity;
 public interface ProductShareUserService extends IService<ProductShareUserEntity> {
 
 	void createRelation(Long productId, Long parentUserId, Long userId);
+	/**
+	 * 
+	 * @param id
+	 * @param earnign
+	 */
+	void addEarning(Long id, Double earning);
 }

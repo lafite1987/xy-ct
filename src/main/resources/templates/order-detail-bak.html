@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"> 
+<head> 
+<meta charset="utf-8" /> 
+<title>测试支付</title> 
+</head> 
+<body> 
+  <div class="index_box"> 
+    <div class="apply_name">微信js支付测试</div> 
+    <div class="branch_con"> 
+      <ul> 
+        <li><span class="name">测试支付信息</span></li> 
+      </ul>
+      <h1 th:text="${orderId}">订单Id</h1>
+      <input id="orderId" th:value="${orderId}" type="hidden"/>
+      <p class="cz_btn"><a href="#" th:href="@{javascript:pay();}" class="btn_1">立即支付</a></p> 
+    </div> 
+    <div id="myConsole"></div>
+  </div> 
+</body> 
+<script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" th:src="@{http://res.wx.qq.com/open/js/jweixin-1.2.0.js}"></script>
+<script src="../static/js/order-detail.js" th:src="@{/js/order-detail.js}"></script>
+</html> 
