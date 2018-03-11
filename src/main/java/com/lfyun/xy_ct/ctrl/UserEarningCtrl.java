@@ -6,20 +6,26 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lfyun.xy_ct.common.Result;
 import com.lfyun.xy_ct.common.User;
 import com.lfyun.xy_ct.entity.UserEarningEntity;
+import com.lfyun.xy_ct.entity.UserEntity;
 import com.lfyun.xy_ct.service.SessionManager;
 import com.lfyun.xy_ct.service.UserEarningService;
+import com.lfyun.xy_ct.service.UserService;
 
 @Controller
 public class UserEarningCtrl {
 
 	@Autowired
 	private SessionManager sessionManager;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private UserEarningService userEarningService;
@@ -32,5 +38,17 @@ public class UserEarningCtrl {
 		List<UserEarningEntity> list = userEarningService.list(user.getId());
 		result.setData(list);
 		return result;
+	}
+	
+	@RequestMapping("/user/withdrawrecord.htm")
+	public String withdrawrecord(Model model, HttpServletRequest request) {
+		User user = sessionManager.getUser(request);
+		user = new User();
+		user.setId(5L);
+		UserEntity userEntity = userService.selectById(user.getId());
+		List<UserEarningEntity> list = userEarningService.list(user.getId());
+		model.addAttribute("earningList", list);
+		model.addAttribute("earning", userEntity.getEarning());
+		return "withdrawrecord";
 	}
 }

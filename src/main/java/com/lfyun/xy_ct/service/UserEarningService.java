@@ -8,7 +8,7 @@ import com.lfyun.xy_ct.entity.UserEarningEntity;
 public interface UserEarningService extends IService<UserEarningEntity> {
 
 	/**
-	 * 给用户的邀请人、邀请人的邀请人、邀请人的邀请人的邀请人添加收益
+	 * 给用户的邀请人们添加收益
 	 * @param orderId
 	 */
 	void addEarning(Long orderId);

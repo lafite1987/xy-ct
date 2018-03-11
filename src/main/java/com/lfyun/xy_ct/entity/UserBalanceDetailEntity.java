@@ -37,11 +37,15 @@ public class UserBalanceDetailEntity {
 	 */
 	private Integer type;
 	/**
-	 * 业务类型：1-充值；2-到店消费；3-退款
+	 * 业务类型：1-充值；2-消费；3-退款
 	 */
 	private Integer businessType;
 	/**
-	 * 1-消费成功；2-消费失败；3-退款成功；4-退款失败；
+	 * 交易单号
+	 */
+	private Long orderId;
+	/**
+	 * 1-成功；2-失败
 	 */
 	private Integer state;
 	

@@ -1,8 +1,8 @@
 function linkToRechargeList(){
-        window.location.href = "rechargerecord.html";
+        window.location.href = "user/rechargerecord.htm";
     }
     function linkToList(){
-        window.location.href = "inventlist.html";
+        window.location.href = "user/myInviteList.htm";
     }
     function linkToreCharge() {
     	var productId = $("#productId").val();
@@ -12,6 +12,9 @@ function linkToRechargeList(){
     function showActiveLayer() {
         var visible = document.getElementById("activeLayer").style.display = 'block';
         console.log(visible);
+    }
+    function showMyQRCode() {
+    	window.location.href = "user/myQRCode.htm";
     }
     function closeActiveLayer() {
         var visible = document.getElementById("activeLayer").style.display = 'none';

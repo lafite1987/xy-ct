@@ -2,6 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lfyun.xy_ct.mapper.ProductShareUserMapper">
 <update id="addEarning">
-UPDATE t_product_share_user SET earning+=#{earning} WHERE id = #{id}
+UPDATE t_product_share_user SET earning = earning + #{earning} WHERE id = #{id}
 </update>
 </mapper>

@@ -90,6 +90,21 @@
       "permStatus": "ENABLE",
       "createTime": 1508932152000,
       "updateTime": 1508934363000
+    },
+    {
+      "id": 53,
+      "systemCode": "xyct",
+      "permName": "商品列表",
+      "parentPermId": 49,
+      "permCode": "product:manage",
+      "permType": "PRODUCT",
+      "permUrl": "/product",
+      "iconClass": "fa fa-bar-chart",
+      "permDesc": "商品管理",
+      "permOrder": 63,
+      "permStatus": "ENABLE",
+      "createTime": 1508932152000,
+      "updateTime": 1508934363000
     }
   ]
 }

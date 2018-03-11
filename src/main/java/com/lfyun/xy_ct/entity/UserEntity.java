@@ -19,11 +19,19 @@ public class UserEntity {
 	@TableId(value="id",type=IdType.AUTO)
 	private Long id;
 	/**
+	 * 累积总余额
+	 */
+	private Double totalBalance;
+	/**
 	 * 余额
 	 */
 	private Double balance;
 	/**
-	 * 收益
+	 * 累积总收益
+	 */
+	private Double totalEarning;
+	/**
+	 * 未提现的收益
 	 */
 	private Double earning;
 	/**

@@ -1,5 +1,6 @@
 package com.lfyun.xy_ct.ctrl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.lfyun.xy_ct.common.DataWrapper;
 import com.lfyun.xy_ct.common.QueryDTO;
 import com.lfyun.xy_ct.common.Result;
+import com.lfyun.xy_ct.common.util.MessageDigestUtil;
 import com.lfyun.xy_ct.entity.AccountEntity;
 import com.lfyun.xy_ct.service.AccountService;
 
@@ -41,6 +43,10 @@ public class AccountCtrl {
 	@ResponseBody
 	public Result<Void> add(@RequestBody AccountEntity form) {
 		Result<Void> result = Result.success();
+		if(StringUtils.isNotBlank(form.getPassword())) {
+			String password = MessageDigestUtil.getSHA256(form.getPassword());
+			form.setPassword(password);
+		}
 		accountService.insert(form);
 		return result;
 	}
@@ -49,13 +55,17 @@ public class AccountCtrl {
 	@ResponseBody
 	public Result<Void> update(@RequestBody AccountEntity form) {
 		Result<Void> result = Result.success();
+		if(StringUtils.isNotBlank(form.getPassword())) {
+			String password = MessageDigestUtil.getSHA256(form.getPassword());
+			form.setPassword(password);
+		}
 		accountService.updateById(form);
 		return result;
 	}
 	
 	@RequestMapping(value = "/{id}/detail.json", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<AccountEntity> update(@PathVariable Long id) {
+	public Result<AccountEntity> detail(@PathVariable Long id) {
 		Result<AccountEntity> result = Result.success();
 		AccountEntity entity = accountService.selectById(id);
 		entity.setPassword(null);

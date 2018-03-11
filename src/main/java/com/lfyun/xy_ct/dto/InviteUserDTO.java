@@ -10,4 +10,6 @@ public class InviteUserDTO {
 	private Long id;
 	
 	private String avatar;
+	
+	private Double earning;
 }

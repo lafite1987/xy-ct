@@ -8,7 +8,9 @@ import lombok.Getter;
 @Getter
 public enum ResultCodeEnums {
     OK(200 , "成功"),
-    ERROR(500 , "失败")
+    ERROR(500 , "失败"),
+    USER_OR_PASSWORD_ERROR(501 , "用户名或密码错误"),
+    NO_LOGIN(502 , "未登录，请先登录"),
     ;
 
     /**

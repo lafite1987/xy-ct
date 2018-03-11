@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,8 @@ import com.lfyun.xy_ct.common.DataWrapper;
 import com.lfyun.xy_ct.common.QueryDTO;
 import com.lfyun.xy_ct.common.Result;
 import com.lfyun.xy_ct.common.User;
+import com.lfyun.xy_ct.common.util.JwtToken;
+import com.lfyun.xy_ct.common.util.QRCodes;
 import com.lfyun.xy_ct.entity.UserEntity;
 import com.lfyun.xy_ct.service.SessionManager;
 import com.lfyun.xy_ct.service.UserService;
@@ -86,6 +89,31 @@ public class UserCtrl {
 		userInfo.put("id", 24);
 		userInfo.put("name", "超级管理员");
 		return userInfo;
+	}
+	
+	@RequestMapping(value = "/myInviteList.htm", method = RequestMethod.GET)
+	public String inventlist(Model model, HttpServletRequest request) {
+		User user = sessionManager.getUser(request);
+		user = new User();
+		user.setId(5L);
+		UserEntity userEntity = userService.selectById(user.getId());
+		model.addAttribute("earning", userEntity.getEarning());
+		model.addAttribute("totalEarning", userEntity.getTotalEarning());
+		return "inventlist";
+	}
+	
+	@RequestMapping(value = "/myQRCode.htm", method = RequestMethod.GET)
+	public String myQRCode(Model model, HttpServletRequest request) {
+		User user = sessionManager.getUser(request);
+		if(user == null) {
+			user = new User();
+			user.setId(5L);
+		}
+		String createUserQCodeData = JwtToken.createUserQCodeData(user.getId());
+		System.out.println("qrCode:" + createUserQCodeData);
+		String qrCode = QRCodes.createQRCode(createUserQCodeData, 200, "1");
+		model.addAttribute("qrCode", qrCode);
+		return "myQRCode";
 	}
 		
 }

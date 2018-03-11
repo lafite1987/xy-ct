@@ -16,6 +16,7 @@ import com.lfyun.xy_ct.mapper.UserEarningMapper;
 import com.lfyun.xy_ct.service.OrderService;
 import com.lfyun.xy_ct.service.ProductShareUserService;
 import com.lfyun.xy_ct.service.UserEarningService;
+import com.lfyun.xy_ct.service.UserService;
 
 @Service
 public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEarningEntity> implements UserEarningService {
@@ -28,10 +29,13 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 	@Autowired
 	private ProductShareUserService productShareUserService;
 	
+	@Autowired
+	private UserService userService;
+	
 	public void addEarning(Long orderId) {
 		OrderEntity orderEntity = orderService.selectById(orderId);
 		if(orderEntity == null) {
-			LOGGER.warn("订单:{}没有找到", orderId);
+			LOGGER.warn("订单号【{}】没有找到", orderId);
 			return;
 		}
 		Long fromUserId = orderEntity.getUserId();
@@ -44,7 +48,7 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 		EntityWrapper<ProductShareUserEntity> wrapper = new EntityWrapper<ProductShareUserEntity>(productShareUserEntity);
 		ProductShareUserEntity parent = productShareUserService.selectOne(wrapper);
 		if(parent == null) {
-			LOGGER.warn("未找到用户:{}的邀请人", fromUserId);
+			LOGGER.warn("未找到用户【id={}】的邀请人", fromUserId);
 			return;
 		}
 		if(isAdd(parent.getParentUserId(), orderId)) {
@@ -56,7 +60,8 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 		productShareUserEntity.setUserId(parent.getParentUserId());
 		ProductShareUserEntity grandfather = productShareUserService.selectOne(wrapper);
 		if(grandfather == null) {
-			LOGGER.warn("未找到用户:{}的邀请人:{}的邀请人", fromUserId, parent.getParentUserId());
+			LOGGER.warn("未找到用户【id={}】的邀请人【id={}】的邀请人", fromUserId, parent.getParentUserId());
+			return;
 		}
 		if(isAdd(grandfather.getParentUserId(), orderId)) {
 			addEarningRecord(grandfather.getParentUserId(), fromUserId, orderId, 20D);
@@ -67,7 +72,8 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 		productShareUserEntity.setUserId(grandfather.getParentUserId());
 		ProductShareUserEntity greatGrandfather = productShareUserService.selectOne(wrapper);
 		if(greatGrandfather == null) {
-			LOGGER.warn("未找到用户:{}的邀请人:{}的邀请人", fromUserId, grandfather.getParentUserId());
+			LOGGER.warn("未找到用户【id={}】的邀请人【id={}】的邀请人", fromUserId, grandfather.getParentUserId());
+			return;
 		}
 		if(isAdd(greatGrandfather.getParentUserId(), orderId)) {
 			addEarningRecord(greatGrandfather.getParentUserId(), fromUserId, orderId, 10D);
@@ -84,6 +90,7 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 		userEarningEntity.setType(1);
 		userEarningEntity.setState(0);
 		this.insert(userEarningEntity);
+		userService.addUserEarning(userId, amount);
 	}
 	
 	private boolean isAdd(Long userId, Long orderId) {

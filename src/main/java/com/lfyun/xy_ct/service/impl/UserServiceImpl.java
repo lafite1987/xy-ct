@@ -9,18 +9,23 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.google.common.collect.Maps;
 import com.lfyun.xy_ct.common.wx.WeiXinResultXMLBean;
-import com.lfyun.xy_ct.entity.UserEntity;
+import com.lfyun.xy_ct.entity.UserBalanceDetailEntity;
 import com.lfyun.xy_ct.entity.UserEarningEntity;
+import com.lfyun.xy_ct.entity.UserEntity;
 import com.lfyun.xy_ct.mapper.UserMapper;
+import com.lfyun.xy_ct.service.UserBalanceDetailService;
+import com.lfyun.xy_ct.service.UserEarningService;
 import com.lfyun.xy_ct.service.UserService;
 import com.lfyun.xy_ct.service.WeixinFirmPaymentService;
-import com.lfyun.xy_ct.service.UserEarningService;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implements UserService {
 
 	@Autowired
-	private UserEarningService withdrawService;
+	private UserEarningService userEarningService;
+	
+	@Autowired
+	private UserBalanceDetailService userBalanceDetailService;
 	
 	@Autowired
 	private WeixinFirmPaymentService weixinFirmPaymentService;
@@ -33,11 +38,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implemen
 	}
 
 	@Override
-	public void addUserBalance(Long userId, Double balance) {
-		UserEntity userEntity = new UserEntity();
-		userEntity.setId(userId);
-		userEntity.setBalance(balance);
-		baseMapper.updateById(userEntity);
+	public void addUserEarning(Long userId, Double earning) {
+		this.baseMapper.addUserEarning(userId, earning);
+	}
+	@Override
+	public void addUserBalance(Long userId, Double amount, Long orderId) {
+		UserEntity userEntity = this.selectById(userId);
+		UserBalanceDetailEntity userBalanceDetailEntity = new UserBalanceDetailEntity();
+		userBalanceDetailEntity.setUserId(userId);
+		userBalanceDetailEntity.setBalance(userEntity.getBalance() + amount);
+		userBalanceDetailEntity.setAmount(amount);
+		userBalanceDetailEntity.setOrderId(orderId);
+		userBalanceDetailEntity.setType(1);
+		userBalanceDetailEntity.setBusinessType(1);
+		userBalanceDetailEntity.setState(1);
+		userBalanceDetailService.insert(userBalanceDetailEntity);
+		this.baseMapper.addUserBalance(userId, amount);
 		
 	}
 
@@ -45,23 +61,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implemen
 	public void withdraw(Long userId) {
 		UserEntity userEntity = selectById(userId);
 		if(userEntity != null && userEntity.getEarning() > 0) {
-			UserEarningEntity withdrawEntity = new UserEarningEntity();
-			withdrawEntity.setUserId(userId);
-			withdrawEntity.setAmount(userEntity.getEarning());
-			withdrawEntity.setState(1);
-			withdrawService.insert(withdrawEntity);
-			String tradeNo = String.valueOf(withdrawEntity.getId());
+			UserEarningEntity userEarningEntity = new UserEarningEntity();
+			userEarningEntity.setUserId(userId);
+			userEarningEntity.setType(2);
+			userEarningEntity.setAmount(userEntity.getEarning());
+			userEarningEntity.setState(1);
+			userEarningService.insert(userEarningEntity);
+			String tradeNo = String.valueOf(userEarningEntity.getId());
 			WeiXinResultXMLBean weiXinResultXMLBean = weixinFirmPaymentService.firmPay(userEntity.getOpenid(), userEntity.getEarning(), "收益提现", tradeNo);
 			if("SUCCESS".equals(weiXinResultXMLBean.getReturn_code()) && "SUCCESS".equals(weiXinResultXMLBean.getResult_code())) {
 				UserEarningEntity updateWithdrawEntity = new UserEarningEntity();
-				updateWithdrawEntity.setId(withdrawEntity.getId());
+				updateWithdrawEntity.setId(userEarningEntity.getId());
 				updateWithdrawEntity.setState(3);
-				withdrawService.updateById(updateWithdrawEntity);
+				userEarningService.updateById(updateWithdrawEntity);
 			} else {
 				UserEarningEntity updateWithdrawEntity = new UserEarningEntity();
-				updateWithdrawEntity.setId(withdrawEntity.getId());
+				updateWithdrawEntity.setId(userEarningEntity.getId());
 				updateWithdrawEntity.setState(4);
-				withdrawService.updateById(updateWithdrawEntity);
+				userEarningService.updateById(updateWithdrawEntity);
 			}
 		}
 	}
@@ -78,5 +95,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implemen
 		}
 		return map;
 	}
-	
+
+	public boolean consume(Long userId, Double amount) {
+		int result = this.baseMapper.consume(userId, amount);
+		return result > 0 ? true : false;
+	}
 }

@@ -25,6 +25,7 @@ import com.lfyun.xy_ct.common.Result;
 import com.lfyun.xy_ct.common.User;
 import com.lfyun.xy_ct.common.enums.PayStatusEnums;
 import com.lfyun.xy_ct.configure.wx.ProjectUrlConfig;
+import com.lfyun.xy_ct.dto.OrderDTO;
 import com.lfyun.xy_ct.entity.OrderEntity;
 import com.lfyun.xy_ct.entity.ProductEntity;
 import com.lfyun.xy_ct.service.OrderService;
@@ -147,6 +148,17 @@ public class OrderCtrl {
 		dataWrapper.setPage(new DataWrapper.Page(page.getCurrent(), page.getSize(), page.getTotal()));
 		Result<DataWrapper<OrderEntity>> result = Result.success();
 		result.setData(dataWrapper);
+		return result;
+	}
+	
+	@RequestMapping(value = "/order/finish.json", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<Void> finish(String orderId) {
+		OrderDTO orderDTO = orderService.getByOrderId(orderId);
+		orderDTO.setOutTradeNo("100010001");
+		orderDTO.setPayFinishTime(System.currentTimeMillis()/1000);
+		orderService.pay(orderDTO);
+		Result<Void> result = Result.success();
 		return result;
 	}
 }
