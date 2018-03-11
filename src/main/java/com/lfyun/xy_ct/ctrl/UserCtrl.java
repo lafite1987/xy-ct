@@ -21,6 +21,8 @@ import com.lfyun.xy_ct.common.Result;
 import com.lfyun.xy_ct.common.User;
 import com.lfyun.xy_ct.common.util.JwtToken;
 import com.lfyun.xy_ct.common.util.QRCodes;
+import com.lfyun.xy_ct.configure.wx.ProjectUrlConfig;
+import com.lfyun.xy_ct.dto.UserShareDTO;
 import com.lfyun.xy_ct.entity.UserEntity;
 import com.lfyun.xy_ct.service.SessionManager;
 import com.lfyun.xy_ct.service.UserService;
@@ -36,6 +38,9 @@ public class UserCtrl {
 	
 	@Autowired
 	private SessionManager sessionManager;
+	
+	@Autowired
+	private ProjectUrlConfig projectUrlConfig;
 	
 	@RequestMapping(value = "/list.json", method = RequestMethod.POST)
 	@ResponseBody
@@ -115,5 +120,16 @@ public class UserCtrl {
 		model.addAttribute("qrCode", qrCode);
 		return "myQRCode";
 	}
-		
+	
+	@RequestMapping(value = "/share")
+	public Result<UserShareDTO> share(Long productId, HttpServletRequest request) {
+		User user = sessionManager.getUser(request);
+		UserShareDTO userShareDTO = new UserShareDTO();
+		userShareDTO.setUserId(user.getId());
+		userShareDTO.setImageUrl("");
+		userShareDTO.setLink(projectUrlConfig.getXyct() + "?from=" + user.getId() + "&productId=" + productId);
+		Result<UserShareDTO> result = Result.success();
+		result.setData(userShareDTO);
+		return result;
+	}
 }

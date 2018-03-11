@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>收益明细</title>
+    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css}"/>
+    <link rel="stylesheet" href="../static/dapanji/css/animate.css" th:href="@{/dapanji/css/animate.css}"/>
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+</head>
+<body>
+<div class="record-wrap">
+    <div class="record-con" >
+        <div class="record-item" th:each="earning : ${earningList}">
+            <div class="left" th:text="${earning.type == 1} ? '收入' : '支出'">
+                                        收入
+            </div>
+            <div class="right" th:text="${earning.amount}">金额</div>
+        </div>
+    </div>
+    <div class="record-bottom">未提现：<span th:text="${earning}">0</span>元</div>
+</div>
+</body>
+<script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script src="../static/js/withdrawrecord.js" th:src="@{/js/withdrawrecord.js?v=124}"></script>
+</html>

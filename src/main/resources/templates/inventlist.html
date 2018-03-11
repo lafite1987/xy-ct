@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>大盘鸡</title>
+    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css}"/>
+    <link rel="stylesheet" href="../static/dapanji/css/animate.css" th:href="@{/dapanji/css/animate.css}"/>
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+</head>
+<body>
+<div class="list-wrap">
+    <div class="income-header">
+        <div class="balance">
+            <div class="left">未提现：<span th:text="${earning}"></span></div>
+            <div class="right" onclick="linkToRecord()">提现明细</div>
+        </div>
+
+        <div class="income-name">总收益（元）</div>
+        <div class="money-all" th:text="${totalEarning}">395</div>
+    </div>
+    <div>
+
+
+    </div>
+    <div class="list-header">
+        <!--<div class="con"></div>-->
+    </div>
+    <div class="list-con">
+        <div class="list-details">
+            <div class="first-users">
+                <img src="../static/dapanji/img/first.png" th:src="@{/dapanji/img/first.png}" class="first-img"/>
+                <div>已邀请<span id="level1Count">0</span>人，共获得奖励<span class="money" id="level1Earning">0</span>元</div>
+                <div class="get-px" id="getPx"></div>
+                <div class="img-list " id="firstList">
+
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<div class="more" id="firstMore"></div>-->
+
+                </div>
+            </div>
+            <div class="second-users">
+                <img src="../static/dapanji/img/second.png" th:src="@{/dapanji/img/second.png}" class="first-img"/>
+                <div>已邀请<span id="level2Count">0</span>人，共获得奖励<span class="money" id="level2Earning">0</span>元</div>
+                <div class="img-list" id="secondList">
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<div class="more" id="secondMore"></div>-->
+                </div>
+            </div>
+            <div class="three-users">
+                <img src="../static/dapanji/img/three.png" th:src="@{/dapanji/img/three.png}" class="first-img"/>
+                <div>已邀请<span id="level3Count">0</span>人，共获得奖励<span class="money" id="level1Earning">0</span>元</div>
+                <div class="img-list" id="thirdList">
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<img src="./img/img/user.jpg">-->
+                    <!--<div class="more" id="thirdMore"></div>-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-space"></div>
+</div>
+</body>
+<script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script src="../static/js/inventlist.js" th:src="@{/js/inventlist.js?v=124}"></script>
+</html>
