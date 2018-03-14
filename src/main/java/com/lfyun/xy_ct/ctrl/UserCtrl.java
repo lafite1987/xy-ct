@@ -121,7 +121,7 @@ public class UserCtrl {
 		return "myQRCode";
 	}
 	
-	@RequestMapping(value = "/share")
+	@RequestMapping(value = "/share", method = RequestMethod.GET)
 	public Result<UserShareDTO> share(Long productId, HttpServletRequest request) {
 		User user = sessionManager.getUser(request);
 		UserShareDTO userShareDTO = new UserShareDTO();
