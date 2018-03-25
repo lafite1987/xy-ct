@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>大盘鸡</title>
-    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css}"/>
+    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css?v=123}"/>
     <link rel="stylesheet" href="../static/dapanji/css/animate.css" th:href="@{/dapanji/css/animate.css}"/>
     <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 </head>
 <body>
 <div class="list-wrap">
+    <input type="hidden" id="productId" th:value="${productId}"/>
     <div class="income-header">
         <div class="balance">
-            <div class="left">未提现：<span th:text="${earning}"></span></div>
+            <div class="left">未提现：<span id="noWithdrawEarning" th:text="${earning}">0</span>
+                <span class="widthbtn" onclick="withdraw()">点我全部提现</span></div>
             <div class="right" onclick="linkToRecord()">提现明细</div>
         </div>
 
@@ -78,5 +80,5 @@
 </div>
 </body>
 <script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
-<script src="../static/js/inventlist.js" th:src="@{/js/inventlist.js?v=124}"></script>
+<script src="../static/js/inventlist.js" th:src="@{/js/inventlist.js?v=1245}"></script>
 </html>

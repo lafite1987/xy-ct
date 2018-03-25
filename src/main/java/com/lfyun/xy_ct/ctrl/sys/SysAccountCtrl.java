@@ -1,4 +1,4 @@
-package com.lfyun.xy_ct.ctrl;
+package com.lfyun.xy_ct.ctrl.sys;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ import com.lfyun.xy_ct.entity.AccountEntity;
 import com.lfyun.xy_ct.service.AccountService;
 
 @Controller
-@RequestMapping("/account")
-public class AccountCtrl {
+@RequestMapping("/sys/account")
+public class SysAccountCtrl {
 
 	@Autowired
 	private AccountService accountService;
@@ -29,8 +29,11 @@ public class AccountCtrl {
 	@ResponseBody
 	public Result<DataWrapper<AccountEntity>> list(@RequestBody QueryDTO<AccountEntity> query) {
 		AccountEntity entity = query.getQuery();
+		Page<AccountEntity> page2 = query.toPage();
+		page2.setOrderByField("createTime");
+		page2.setAsc(false);
 		EntityWrapper<AccountEntity> wrapper = new EntityWrapper<AccountEntity>(entity);
-		Page<AccountEntity> page = accountService.selectPage(query.toPage(), wrapper);
+		Page<AccountEntity> page = accountService.selectPage(page2, wrapper);
 		DataWrapper<AccountEntity> dataWrapper = new DataWrapper<>();
 		dataWrapper.setList(page.getRecords());
 		dataWrapper.setPage(new DataWrapper.Page(page.getCurrent(), page.getSize(), page.getTotal()));

@@ -22,6 +22,12 @@ public interface UserMapper extends BaseMapper<UserEntity> {
 	 */
 	void addUserEarning(@Param("userId")Long userId, @Param("earning")Double earning);
 	/**
+	 * 提现
+	 * @param userId
+	 * @return
+	 */
+	int withdraw(@Param("userId")Long userId);
+	/**
 	 * 消费
 	 * @param userId
 	 * @param amount

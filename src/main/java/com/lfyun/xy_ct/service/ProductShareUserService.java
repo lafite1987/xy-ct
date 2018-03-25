@@ -14,5 +14,5 @@ public interface ProductShareUserService extends IService<ProductShareUserEntity
 	 */
 	void addEarning(Long id, Double earning);
 	
-	InviteDTO inviteList(Long userId);
+	InviteDTO inviteList(Long userId, Long productId);
 }

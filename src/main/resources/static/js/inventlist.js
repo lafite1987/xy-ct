@@ -1,7 +1,20 @@
 function linkToRecord() {
 	window.location.href = "withdrawrecord.htm";
 }
-
+function withdraw() {
+	$.ajax({
+        url : "/wxp/user/withdraw",
+        type : "post",
+        async: true,
+        dataType : 'json',
+        success : function(data) {
+        	if(data.code == 200) {
+        		$("#noWithdrawEarning").text(0);
+        		alert("提现成功");
+        	}
+        }
+	});
+}
 var indexToPosition = [ "first", "second", "third" ];
 var eleWidth = 0;
 var maxnum = 0;
@@ -81,12 +94,13 @@ function closeMore(data, position, ele) {
 	addMoreBtn(data, position, ele);
 }
 $(function() {
+	var productId = $("#productId").val();
 	$.ajax({
         url : "/wxp/user/inviteList",
         type : "get",
         async: true,
         dataType : 'json',
-        data :{token : "3f5553dc-9f97-4f84-9586-9a2717535b2d"},
+        data : {productId : productId},
         success : function(data) {
         	$("#level1Count").html(data.data.level1.length);
         	$("#level2Count").html(data.data.level2.length);

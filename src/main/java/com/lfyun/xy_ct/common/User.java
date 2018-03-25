@@ -18,4 +18,10 @@ public class User implements Serializable {
 	private String openid;
 	
 	private String accessToken;
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", nickname=" + nickname + ", openid="
+				+ openid + "]";
+	}
 }

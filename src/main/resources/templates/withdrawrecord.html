@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>收益明细</title>
-    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css}"/>
+    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css?v=123}"/>
     <link rel="stylesheet" href="../static/dapanji/css/animate.css" th:href="@{/dapanji/css/animate.css}"/>
     <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 </head>
@@ -11,9 +11,11 @@
 <div class="record-wrap">
     <div class="record-con" >
         <div class="record-item" th:each="earning : ${earningList}">
-            <div class="left" th:text="${earning.type == 1} ? '收入' : '支出'">
-                                        收入
+            <div class="left">
+                <div th:text="${earning.type == 1} ? '收入' : '支出'">收入</div>
+                <div class="date" th:text="${#dates.format(earning.createTime,'yyyy-MM-dd HH:mm:ss')} ">2018-1-1 13:10</div>
             </div>
+            <div class="right" th:text="${earning.type == 1} ? '+' : '-'"></div>
             <div class="right" th:text="${earning.amount}">金额</div>
         </div>
     </div>

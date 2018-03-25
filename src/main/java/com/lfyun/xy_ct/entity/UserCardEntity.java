@@ -10,37 +10,31 @@ import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
 
 @Data
-@TableName("t_order")
-public class OrderEntity {
+@TableName("t_user_card")
+public class UserCardEntity {
 
-	@TableId(value="id",type=IdType.ID_WORKER)
+	@TableId(value="id",type=IdType.AUTO)
     private Long id;
 	
-	private Long productId;
-	
-	private String productName;
-	
-	/**
-	 * 订单金额
-	 */
-	private Double amount;
-	
-	/**
-	 * 支付状态：1-创建；2-待支付；3-支付成功
-	 */
-	private Integer payStatus;
-	/**
-	 * 用户唯一标识
-	 */
 	private Long userId;
+	
+	private Long cardId;
 	/**
-	 * 微信订单号
+	 * 拥有卡券数量
 	 */
-	private String outTradeNo;
+	private Integer ownCount;
 	/**
-	 * 支付完成时间精确到秒
+	 * 已使用数量
 	 */
-	private Long payFinishTime;
+	private Integer usedCount;
+	/**
+	 * 使用时间
+	 */
+	private Long useTime;
+	/**
+	 * 1-未使用；2-已使用
+	 */
+	private Integer state;
 	
 	@TableField(fill = FieldFill.INSERT, value="createTime")
 	private Long createTime;
@@ -50,8 +44,4 @@ public class OrderEntity {
 	
 	@TableLogic
     private Integer deleted;
-	
-	private transient Long startTime;
-	
-	private transient Long endTime;
 }

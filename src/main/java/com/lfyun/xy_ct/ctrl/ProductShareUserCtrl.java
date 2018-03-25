@@ -55,18 +55,11 @@ public class ProductShareUserCtrl {
 	
 	@RequestMapping(value = "/user/inviteList", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<InviteDTO> inviteList(HttpServletRequest request) {
+	public Result<InviteDTO> inviteList(Long productId, HttpServletRequest request) {
 		Result<InviteDTO> result = Result.success();
 		User user = SessionManager.getUser(request);
-		if(user == null) {
-			user = new User();
-			user.setId(5L);
-		}
-//		if(user == null) {
-//			return result;
-//		}
 		Long userId = user.getId();
-		InviteDTO inviteDTO = productShareUserService.inviteList(userId);
+		InviteDTO inviteDTO = productShareUserService.inviteList(userId, productId);
 		result.setData(inviteDTO);
 		return result;
 	}

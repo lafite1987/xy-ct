@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>优惠券</title>
+    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css?v=12345}"/>
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+</head>
+<body>
+<div class="present-wrap" id="presentList">
+
+    <div th:attr="class=${userCard.classStyle}" class="list-item" th:each="userCard : ${userCardList}">
+        <div class="item-top">
+            <input type="hidden" id="userCardId" th:value="${userCard.id}"/>
+            <div class="one"><span class="num" th:text="${userCard.reduceCost}">30</span>元</div>
+            <div class="two">
+                <div th:text="${userCard.title}">大盘鸡专享抵用券</div>
+                <div th:text="${userCard.state}">未使用</div>
+                <div th:text="${userCard.effectiveEndTime}">2018.03.18 20:00
+                </div>
+            </div>
+            <div class="three">
+                <div class="btn" onclick="useTicket()" th:onclick="'javascript:useTicket('+${userCard.id}+')'" id="present1">去使用</div>
+            </div>
+        </div>
+        <div class="item-bottom">
+            仅限永州万达广场西域新疆主题餐厅使用
+        </div>
+    </div>
+</div>
+</body>
+<script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script src="../static/js/myCard.js" th:src="@{/js/myCard.js?v=1245}"></script>
+</html>

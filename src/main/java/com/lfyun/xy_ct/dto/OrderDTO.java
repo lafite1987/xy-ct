@@ -6,6 +6,10 @@ import lombok.Data;
 
 @Data
 public class OrderDTO {
+	/**
+	 * 商品Id
+	 */
+	private Long productId;
     /**订单id*/
     private String orderId;
     /**

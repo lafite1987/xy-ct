@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>大盘鸡</title>
-    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css}"/>
+    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css?t=123}"/>
     <link rel="stylesheet" href="../static/dapanji/css/animate.css" th:href="@{/dapanji/css/animate.css}"/>
     <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
     <script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
@@ -22,13 +22,16 @@
             <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-three-img"/>
             <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-four-img"/>
             <div class="title-one"></div>
-            <div class="content">充值398元，全部可用于消费，还可<span class="big-font">额外获赠</span>“价值68元的大盘鸡”一份哦！</div>
+            <div class="content">充值198元，全部可用于消费，还可<span class="big-font">额外获赠</span>“价值68元的大盘鸡”一份哦！</div>
             <input type="hidden" id="productId" name="productId" th:value="${productId}" />
+            <input type="hidden" id="shareLink" name="shareLink" th:value="${shareLink}" />
             <div class="btn" onclick="linkToreCharge()">立即充值</div>
         </div>
         <div class="share-users">
             <img src="../static/dapanji/img/two-line.png" th:src="@{/dapanji/img/two-line.png}" class="share-line"/>
             <div class="invent" onclick="linkToRechargeList()">充值账单</div>
+            <div class="invent" onclick="myPayQrCode('payLayer')">付款二维码</div>
+            <div class="invent" onclick="myCard()">我的卡券</div>
             <img src="../static/dapanji/img/two-line.png" th:src="@{/dapanji/img/two-line.png}" class="share-line-right"/>
         </div>
         <div class="juhui">
@@ -36,14 +39,14 @@
             <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-two-img"/>
             <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-three-img"/>
             <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-four-img"/>
-            <div class="title-one"></div>
+            <div class="title-two"></div>
             <div class="content">将此优惠分享给其他好友，并教会他们也分享出去，不仅让大家共享如此钜惠，更能让大家一起来<span class="big-font">免费吃！吃！吃！</span></div>
             <div class="btn" onclick="showShareLayer()">邀请好友，拿奖励</div>
         </div>
         <div class="share-users">
             <img src="../static/dapanji/img/two-line.png" th:src="@{/dapanji/img/two-line.png}" class="share-line"/>
             <div class="invent" onclick="linkToList()">我邀请的新用户</div>
-            <div class="invent" onclick="showMyQRCode()">我的二维码</div>
+            <div class="invent" onclick="myShareQrCode('shareRQLayer')">我的分享二维码</div>
             <img src="../static/dapanji/img/two-line.png" th:src="@{/dapanji/img/two-line.png}" class="share-line-right"/>
         </div>
         <div class="address">
@@ -54,7 +57,7 @@
 </div>
 <div class="active-rule" onclick="showActiveLayer()">活动规则</div>
 <div class="pop-layer" onclick="closeActiveLayer()" id="activeLayer">
-    <div class="content">
+    <div class="content" id="pop-con3">
         <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-one-img"/>
         <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-two-img"/>
         <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-three-img"/>
@@ -62,7 +65,7 @@
         <img src="../static/dapanji/img/active-rule.png" th:src="@{/dapanji/img/active-rule.png}" class="active-rulr"/>
         <div class="flex-row">
             <div class="row-left">1.</div>
-            <div class="row-right">充值398元，全部可用于消费，还可额外获赠“价值68元的大盘鸡”一份哦！</div>
+            <div class="row-right">充值198元，全部可用于消费，还可额外获赠“价值68元的大盘鸡”一份哦！</div>
         </div>
         <div class="flex-row">
             <div class="row-left">2.</div>
@@ -84,7 +87,25 @@
 
     </div>
 </div>
+<!--付款二维码弹窗 start-->
+<div class="pop-layer" onclick="closeLayer('payLayer')" id="payLayer">
+    <div class="content" id="pop-con1">
+        <div class="rq-div">
+            <img src="" class="rQimg" id="myPayQrCodeImg"/>
+        </div>
+    </div>
+</div>
+<!--付款二维码弹窗 end-->
+<!--分享二维码弹窗 start-->
+<div class="pop-layer" onclick="closeLayer('shareRQLayer')" id="shareRQLayer">
+    <div class="content" id="pop-con2">
+        <div  class="rq-div">
+            <img src="" class="rQimg" id="myShareQrCodeImg"/>
+        </div>
+    </div>
+</div>
+<!--分享二维码弹窗 end-->
 </div>
 </body>
-<script src="../static/js/recharge.js" th:src="@{/js/recharge.js?v=125}"></script>
+<script src="../static/js/recharge.js" th:src="@{/js/recharge.js?v=1500}"></script>
 </html>

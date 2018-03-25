@@ -1,11 +1,13 @@
 package com.lfyun.xy_ct.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -17,6 +19,10 @@ import com.lfyun.xy_ct.service.OrderService;
 import com.lfyun.xy_ct.service.ProductShareUserService;
 import com.lfyun.xy_ct.service.UserEarningService;
 import com.lfyun.xy_ct.service.UserService;
+
+import jersey.repackaged.com.google.common.collect.Maps;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Service
 public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEarningEntity> implements UserEarningService {
@@ -32,7 +38,24 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 	@Autowired
 	private UserService userService;
 	
+	private static Map<String, EarningConfigure> earningConfigureCache = Maps.newConcurrentMap();
+	@Getter
+	@AllArgsConstructor
+	public static class EarningConfigure {
+		private double level1;
+		private double level2;
+		private double level3;
+		
+	}
+	static {
+		earningConfigureCache.put("dev", new EarningConfigure(0.01, 0.01, 0.01));
+		earningConfigureCache.put("prod", new EarningConfigure(20, 5, 3));
+	}
+	
+	@Transactional
 	public void addEarning(Long orderId) {
+		String env = System.getProperty("earning.configure.env", "dev");
+		EarningConfigure earningConfigure = earningConfigureCache.get(env);
 		OrderEntity orderEntity = orderService.selectById(orderId);
 		if(orderEntity == null) {
 			LOGGER.warn("订单号【{}】没有找到", orderId);
@@ -52,8 +75,8 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 			return;
 		}
 		if(isAdd(parent.getParentUserId(), orderId)) {
-			addEarningRecord(parent.getParentUserId(), fromUserId, orderId, 30D);
-			productShareUserService.addEarning(parent.getId(), 30D);
+			addEarningRecord(parent.getParentUserId(), fromUserId, orderId, earningConfigure.getLevel1());
+			productShareUserService.addEarning(parent.getId(), earningConfigure.getLevel1());
 		}
 		
 		//给fromUserId的邀请人的邀请人发收益
@@ -64,8 +87,8 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 			return;
 		}
 		if(isAdd(grandfather.getParentUserId(), orderId)) {
-			addEarningRecord(grandfather.getParentUserId(), fromUserId, orderId, 20D);
-			productShareUserService.addEarning(grandfather.getId(), 20D);
+			addEarningRecord(grandfather.getParentUserId(), fromUserId, orderId, earningConfigure.getLevel2());
+			productShareUserService.addEarning(grandfather.getId(), earningConfigure.getLevel2());
 		}
 		
 		//给fromUserId的邀请人的邀请人的邀请人发收益
@@ -76,8 +99,8 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 			return;
 		}
 		if(isAdd(greatGrandfather.getParentUserId(), orderId)) {
-			addEarningRecord(greatGrandfather.getParentUserId(), fromUserId, orderId, 10D);
-			productShareUserService.addEarning(greatGrandfather.getId(), 10D);
+			addEarningRecord(greatGrandfather.getParentUserId(), fromUserId, orderId, earningConfigure.getLevel3());
+			productShareUserService.addEarning(greatGrandfather.getId(), earningConfigure.getLevel3());
 		}
 	}
 	

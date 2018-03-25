@@ -1,4 +1,4 @@
-package com.lfyun.xy_ct.ctrl;
+package com.lfyun.xy_ct.ctrl.sys;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +17,8 @@ import com.lfyun.xy_ct.entity.ProductEntity;
 import com.lfyun.xy_ct.service.ProductService;
 
 @Controller
-@RequestMapping("/product")
-public class ProductCtrl {
+@RequestMapping("/sys/product")
+public class SysProductCtrl {
 
 	@Autowired
 	private ProductService productService;
@@ -27,8 +27,11 @@ public class ProductCtrl {
 	@ResponseBody
 	public Result<DataWrapper<ProductEntity>> list(@RequestBody QueryDTO<ProductEntity> query) {
 		ProductEntity entity = query.getQuery();
+		Page<ProductEntity> page2 = query.toPage();
+		page2.setOrderByField("createTime");
+		page2.setAsc(false);
 		EntityWrapper<ProductEntity> wrapper = new EntityWrapper<ProductEntity>(entity);
-		Page<ProductEntity> page = productService.selectPage(query.toPage(), wrapper);
+		Page<ProductEntity> page = productService.selectPage(page2, wrapper);
 		DataWrapper<ProductEntity> dataWrapper = new DataWrapper<>();
 		dataWrapper.setList(page.getRecords());
 		dataWrapper.setPage(new DataWrapper.Page(page.getCurrent(), page.getSize(), page.getTotal()));

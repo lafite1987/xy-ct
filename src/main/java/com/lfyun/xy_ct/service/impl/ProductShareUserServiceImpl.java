@@ -50,6 +50,10 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 			LOGGER.warn("传入参数非法：productId:{} parentUserId:{} userId:{}", productId, parentUserId, userId);
 			return;
 		}
+		if(isHasRelation(parentUserId, userId)) {
+			LOGGER.warn("productId:{} userId:{} and parentUserId:{} had relation", productId, userId, parentUserId);
+			return;
+		}
 		//一级分销
 		int level1 = 1;
 		ProductShareUserEntity productShareUserEntity = getByUserIdAndProductId(userId, level1, productId);
@@ -100,10 +104,22 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 		this.baseMapper.addEarning(id, earning);
 	}
 	
-	public InviteDTO inviteList(Long userId) {
+	private boolean isHasRelation(Long parentUserId, Long userId) {
+		ProductShareUserEntity entity = new ProductShareUserEntity();
+		entity.setParentUserId(userId);
+		entity.setUserId(parentUserId);
+		EntityWrapper<ProductShareUserEntity> wrapper = new EntityWrapper<ProductShareUserEntity>(entity);
+		int count = this.selectCount(wrapper);
+		if(count > 0) {
+			return true;
+		}
+		return false;
+	}
+	public InviteDTO inviteList(Long userId, Long productId) {
 		ProductShareUserEntity entity = new ProductShareUserEntity();
 		entity.setLevel(1);
 		entity.setParentUserId(userId);
+		entity.setProductId(productId);
 		EntityWrapper<ProductShareUserEntity> wrapper = new EntityWrapper<ProductShareUserEntity>(entity);
 		List<ProductShareUserEntity> selectList1 = this.selectList(wrapper);
 		entity.setLevel(2);
@@ -125,26 +141,6 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 		inviteDTO.setLevel2(wrapper2.level);
 		inviteDTO.setLevel3Earning(wrapper3.earning);
 		inviteDTO.setLevel3(wrapper3.level);
-		inviteDTO.getLevel1().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel1().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel1().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel1().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel1().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel1().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel1().add(inviteDTO.getLevel1().get(0));
-		
-		inviteDTO.getLevel2().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel2().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel2().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel2().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel2().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel2().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel2().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel2().add(inviteDTO.getLevel1().get(0));
-		inviteDTO.getLevel2().add(inviteDTO.getLevel1().get(0));
-		
-		inviteDTO.getLevel3().addAll(inviteDTO.getLevel1());
-		inviteDTO.getLevel3().addAll(inviteDTO.getLevel2());
 		return inviteDTO;
 	}
 	

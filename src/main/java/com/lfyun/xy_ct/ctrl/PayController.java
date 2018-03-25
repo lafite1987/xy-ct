@@ -58,6 +58,7 @@ public class PayController {
         map.put("returnUrl" , returnUrl);
         Result<PayResponse> result = Result.success();
         result.setData(payResponse);
+        result.setMessage(String.valueOf(orderDTO.getProductId()));
         //3.唤起支付
 //        return new ModelAndView("pay/create" , map);
         return result;

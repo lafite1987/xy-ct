@@ -4,6 +4,9 @@
 <update id="addUserEarning">
 UPDATE t_user SET earning = earning + #{earning}, totalEarning = totalEarning + #{earning} WHERE id = #{userId}
 </update>
+<update id="withdraw">
+UPDATE t_user SET earning = 0 WHERE id = #{userId} and earning > 0
+</update>
 <update id="addUserBalance">
 UPDATE t_user SET balance = balance + #{balance}, totalBalance = totalBalance + #{balance} WHERE id = #{userId}
 </update>

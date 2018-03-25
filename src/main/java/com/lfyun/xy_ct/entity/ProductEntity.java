@@ -14,6 +14,10 @@ public class ProductEntity {
 
 	@TableId(value="id")
 	private Long id;
+	/**
+	 * 关联卡券
+	 */
+	private Long cardId;
 	
 	private String title;
 	

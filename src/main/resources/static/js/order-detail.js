@@ -23,7 +23,6 @@ function appendConsole (val) {
   
    function onBridgeReady() { 
 	   var orderId = $("#orderId").val();
-	   alert(orderId);
 	   $.ajax({
 	          url : "/wxp/pay/create",
 	          type : "get",
@@ -31,7 +30,6 @@ function appendConsole (val) {
 	          data : {orderId : orderId},
 	          dataType : 'json',
 	          success : function(data) {
-	        	  alert("data:" + data);
 	              if (data.code == 200) {
 	            	  var appId = data.data.appId
 	            	  var timeStamp = data.data.timeStamp;
@@ -39,7 +37,6 @@ function appendConsole (val) {
 	            	  var pg = data.data['package'];
 	            	  var signType = data.data.signType;
 	            	  var paySign = data.data.paySign;
-	            	  alert(appId + ":" + pg);
 	            	  wx.chooseWXPay({
 	                      timestamp: timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
 	                      nonceStr: nonceStr, // 支付签名随机串，不长于 32 位
@@ -48,8 +45,8 @@ function appendConsole (val) {
 	                      paySign: paySign, // 支付签名
 	                      success: function (res) {
 	                          // 支付成功后的回调函数
-	                          alert("response:" + res)
-	                          alert("OK")
+	                          alert("支付成功");
+	                          window.location.href = "recharge.htm?productId=" + data.message;
 	                      },
 	                      fail: function(res) {
 	                          alert("fail:" + res);
@@ -74,7 +71,7 @@ function getJsApiParam(url) {
         data: { 'url': url },
         success: function (param) {
             wx.config({
-                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                 appId: param.appId, // 必填，公众号的唯一标识
                 timestamp: param.timestamp, // 必填，生成签名的时间戳
                 nonceStr: param.nonceStr, // 必填，生成签名的随机串
@@ -89,7 +86,6 @@ function getJsApiParam(url) {
 }
 
 function pay(){ 
-	var orderId = $("#orderId").val();
-	alert("order:" + orderId);
-	getJsApiParam("http://api.mcwh123.com/wxp/order-detail.htm"); 
+	var url = location.href.split('#')[0];
+	getJsApiParam(url);
 } 

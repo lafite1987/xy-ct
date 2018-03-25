@@ -61,7 +61,8 @@ public enum ExceptionCodeEnums {
     LOGIN_SUCCESS(34 , "登录成功"),
 
     LOGOUT_SUCCESS(35 , "登出成功"),
-
+    
+    USER_WITHDRAW_FAILED(40, "提现失败"),
     ;
 
     private Integer code;

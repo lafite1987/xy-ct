@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.lfyun.xy_ct.common.util.MessageDigestUtil;
+import com.lfyun.xy_ct.common.util.MD5;
 import com.lfyun.xy_ct.common.util.UuidUtil;
 import com.lfyun.xy_ct.common.wx.WeiXinResultXMLBean;
 import com.lly835.bestpay.utils.XmlUtil;
@@ -130,7 +130,7 @@ public class WeixinFirmPaymentService {
 		xmlData.append("<spbill_create_ip>120.77.255.241</spbill_create_ip>"); // 终端IP
 		strData.append("&spbill_create_ip=120.77.255.241");
 		strData.append("&key=" + mchKey);
-		String sign = MessageDigestUtil.getMD5(strData.toString());
+		String sign = MD5.stringToMD5(strData.toString());
 		xmlData.append("<sign>" + sign + "</sign>"); // 签名
 		xmlData.append("</xml>");
 		return xmlData.toString();

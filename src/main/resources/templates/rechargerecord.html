@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>账单</title>
-    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css}"/>
+    <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css?v=123}"/>
     <link rel="stylesheet" href="../static/dapanji/css/animate.css" th:href="@{/dapanji/css/animate.css}"/>
     <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 </head>
@@ -11,11 +11,19 @@
 <div class="record-wrap">
     <div class="record-con" >
         <div class="record-item" th:each="balanceDetail : ${balanceDetailList}">
-            <div class="left" th:switch="${balanceDetail.businessType}">
-              <span th:case="1" th:text="@{充值}">充值</span>
-              <span th:case="2" th:text="@{消费}"></span>
-              <span th:case="3" th:text="@{退款}"></span>                      
+            <div class="left">
+              <div th:switch="${balanceDetail.businessType}">
+                <span th:case="1" th:text="@{充值}">充值</span>
+                <span th:case="2" th:text="@{消费}"></span>
+                <span th:case="3" th:text="@{退款}"></span>
+              </div>
+              <div class="date" th:text="${#dates.format(balanceDetail.createTime,'yyyy-MM-dd HH:mm:ss')} ">2018-1-1 13:10</div>                      
             </div>
+            <div class="right" th:switch="${balanceDetail.businessType}">
+                <span th:case="1" th:text="@{+}"></span>
+                <span th:case="2" th:text="@{-}"></span>
+                <span th:case="3" th:text="@{+}"></span>
+              </div>
             <div class="right" th:text="${balanceDetail.amount}">金额</div>
         </div>
     </div>

@@ -5,13 +5,16 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.google.common.collect.Maps;
+import com.lfyun.xy_ct.common.enums.ExceptionCodeEnums;
 import com.lfyun.xy_ct.common.wx.WeiXinResultXMLBean;
 import com.lfyun.xy_ct.entity.UserBalanceDetailEntity;
 import com.lfyun.xy_ct.entity.UserEarningEntity;
 import com.lfyun.xy_ct.entity.UserEntity;
+import com.lfyun.xy_ct.exception.AppException;
 import com.lfyun.xy_ct.mapper.UserMapper;
 import com.lfyun.xy_ct.service.UserBalanceDetailService;
 import com.lfyun.xy_ct.service.UserEarningService;
@@ -42,6 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implemen
 		this.baseMapper.addUserEarning(userId, earning);
 	}
 	@Override
+	@Transactional
 	public void addUserBalance(Long userId, Double amount, Long orderId) {
 		UserEntity userEntity = this.selectById(userId);
 		UserBalanceDetailEntity userBalanceDetailEntity = new UserBalanceDetailEntity();
@@ -58,27 +62,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implemen
 	}
 
 	@Override
+	@Transactional
 	public void withdraw(Long userId) {
 		UserEntity userEntity = selectById(userId);
 		if(userEntity != null && userEntity.getEarning() > 0) {
-			UserEarningEntity userEarningEntity = new UserEarningEntity();
-			userEarningEntity.setUserId(userId);
-			userEarningEntity.setType(2);
-			userEarningEntity.setAmount(userEntity.getEarning());
-			userEarningEntity.setState(1);
-			userEarningService.insert(userEarningEntity);
-			String tradeNo = String.valueOf(userEarningEntity.getId());
-			WeiXinResultXMLBean weiXinResultXMLBean = weixinFirmPaymentService.firmPay(userEntity.getOpenid(), userEntity.getEarning(), "收益提现", tradeNo);
-			if("SUCCESS".equals(weiXinResultXMLBean.getReturn_code()) && "SUCCESS".equals(weiXinResultXMLBean.getResult_code())) {
-				UserEarningEntity updateWithdrawEntity = new UserEarningEntity();
-				updateWithdrawEntity.setId(userEarningEntity.getId());
-				updateWithdrawEntity.setState(3);
-				userEarningService.updateById(updateWithdrawEntity);
-			} else {
-				UserEarningEntity updateWithdrawEntity = new UserEarningEntity();
-				updateWithdrawEntity.setId(userEarningEntity.getId());
-				updateWithdrawEntity.setState(4);
-				userEarningService.updateById(updateWithdrawEntity);
+			int withdraw = this.baseMapper.withdraw(userId);
+			if(withdraw > 0) {
+				UserEarningEntity userEarningEntity = new UserEarningEntity();
+				userEarningEntity.setUserId(userId);
+				userEarningEntity.setType(2);
+				userEarningEntity.setAmount(userEntity.getEarning());
+				userEarningEntity.setState(1);
+				userEarningService.insert(userEarningEntity);
+				String tradeNo = String.valueOf(userEarningEntity.getId());
+				WeiXinResultXMLBean weiXinResultXMLBean = weixinFirmPaymentService.firmPay(userEntity.getOpenid(), userEntity.getEarning(), "收益提现", tradeNo);
+				if("SUCCESS".equals(weiXinResultXMLBean.getReturn_code()) && "SUCCESS".equals(weiXinResultXMLBean.getResult_code())) {
+					UserEarningEntity updateWithdrawEntity = new UserEarningEntity();
+					updateWithdrawEntity.setId(userEarningEntity.getId());
+					updateWithdrawEntity.setState(3);
+					userEarningService.updateById(updateWithdrawEntity);
+				} else {
+					UserEarningEntity updateWithdrawEntity = new UserEarningEntity();
+					updateWithdrawEntity.setId(userEarningEntity.getId());
+					updateWithdrawEntity.setState(4);
+					userEarningService.updateById(updateWithdrawEntity);
+					throw new AppException(ExceptionCodeEnums.USER_WITHDRAW_FAILED);
+				}
 			}
 		}
 	}

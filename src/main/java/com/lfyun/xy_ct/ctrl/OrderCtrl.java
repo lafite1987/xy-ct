@@ -11,16 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.lfyun.xy_ct.common.DataWrapper;
-import com.lfyun.xy_ct.common.QueryDTO;
 import com.lfyun.xy_ct.common.Result;
 import com.lfyun.xy_ct.common.User;
 import com.lfyun.xy_ct.common.enums.PayStatusEnums;
@@ -84,25 +79,33 @@ public class OrderCtrl {
 	}
 	
 	@RequestMapping(value = "recharge.htm", method = RequestMethod.GET)
-	public String recharge(@RequestParam(name = "from", defaultValue = "", required = false)String from, 
+	public String recharge(@RequestParam(name = "fromUserId", defaultValue = "", required = false)String fromUserId, 
 			@RequestParam(name = "productId", defaultValue = "", required = false)Long productId, Model model, HttpServletRequest request) {
 		User user = sessionManager.getUser(request);
 		if(user == null) {
 			//1.配置微信公众号信息
-			String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge.htm?from=" + from + "&productId=" + productId;
+			String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge.htm?fromUserId=" + fromUserId + "&productId=" + productId;
 	        String url = projectUrlConfig.getMpAuthorizeUrl()+"/wxp/wechat/userInfo";
 	        String redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAUTH2_SCOPE_USER_INFO, URLEncoder.encode(returnUrl));
 			return "redirect:" + redirectUrl;
 		}
 		ProductEntity productEntity = productService.selectById(productId);
-		if(StringUtils.isNotBlank(from)) {
+		if(StringUtils.isNotBlank(fromUserId) && !String.valueOf(user.getId()).equals(fromUserId)) {
 			try {
-				Long parentUserId = Long.parseLong(from);
+				Long parentUserId = Long.parseLong(fromUserId);
 				productShareUserService.createRelation(productId, parentUserId, user.getId());
+				String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge.htm?fromUserId=" + user.getId() + "&productId=" + productId;
+				return "redirect:" + returnUrl;
 			} catch (Exception e) {
-				LOGGER.error("更新用户推荐人错误:userId:{} from:{}", user.getId(), from, e);
+				LOGGER.error("更新用户推荐人错误:userId:{} fromUserId:{}", user.getId(), fromUserId, e);
 			}
 		}
+		if(StringUtils.isBlank(fromUserId)) {
+			String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge.htm?fromUserId=" + user.getId() + "&productId=" + productId;
+			return "redirect:" + returnUrl;
+		}
+		String link = projectUrlConfig.getXyct() + "/recharge.htm?fromUserId=" + user.getId() + "&productId=" + productId;
+		model.addAttribute("shareLink", link);
 		model.addAttribute("productId", productId);
 		model.addAttribute("price", productEntity.getPrice());
 		return "recharge";
@@ -121,33 +124,6 @@ public class OrderCtrl {
 	public Result<OrderEntity> getDetail(@PathVariable Long id) {
 		OrderEntity orderEntity = orderService.selectById(id);
 		Result<OrderEntity> result = Result.<OrderEntity>success().setData(orderEntity);
-		return result;
-	}
-	
-	@RequestMapping(value = "/order/update/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<OrderEntity> update(@PathVariable Long id) {
-		Result<OrderEntity> result = Result.success();
-		OrderEntity entity = new OrderEntity();
-		entity.setId(id);
-		entity.setPayStatus(PayStatusEnums.FINISH.getCode());
-		orderService.updateById(entity);
-		OrderEntity orderEntity = orderService.selectById(id);
-		result.setData(orderEntity);
-		return result;
-	}
-	
-	@RequestMapping(value = "/order/list.json", method = RequestMethod.POST)
-	@ResponseBody
-	public Result<DataWrapper<OrderEntity>> list(@RequestBody QueryDTO<OrderEntity> query) {
-		OrderEntity entity = query.getQuery();
-		EntityWrapper<OrderEntity> wrapper = new EntityWrapper<OrderEntity>(entity);
-		Page<OrderEntity> page = orderService.selectPage(query.toPage(), wrapper);
-		DataWrapper<OrderEntity> dataWrapper = new DataWrapper<>();
-		dataWrapper.setList(page.getRecords());
-		dataWrapper.setPage(new DataWrapper.Page(page.getCurrent(), page.getSize(), page.getTotal()));
-		Result<DataWrapper<OrderEntity>> result = Result.success();
-		result.setData(dataWrapper);
 		return result;
 	}
 	
