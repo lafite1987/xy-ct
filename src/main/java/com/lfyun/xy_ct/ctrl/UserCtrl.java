@@ -120,11 +120,11 @@ public class UserCtrl {
 		User user = sessionManager.getUser(request);
 		LOGGER.info("user={} share productId={}", user, productId);
 		UserShareDTO userShareDTO = new UserShareDTO();
-		userShareDTO.setTitle("大盘鸡几级");
-		userShareDTO.setDescription("这是一个大盘鸡活动");
+		userShareDTO.setTitle("充值活动");
+		userShareDTO.setDescription("充值即送优惠券，邀请好友返现！");
 		userShareDTO.setUserId(user.getId());
 		userShareDTO.setImageUrl("");
-		String link = projectUrlConfig.getXyct() + "/recharge.htm?fromUserId=" + user.getId() + "&productId=" + productId;
+		String link = projectUrlConfig.getXyct() + "/wxp/recharge.htm?fromUserId=" + user.getId() + "&productId=" + productId;
 		userShareDTO.setLink(link);
 		Result<UserShareDTO> result = Result.success();
 		result.setData(userShareDTO);
