@@ -77,8 +77,7 @@ public class JwtToken {
     }  
     
     public static void main(String[] args) {
-		String token = JwtToken.createToken(1L);
-		DecodedJWT verifyToken = verifyToken(token);
-		System.out.println(verifyToken.getClaim("userId").asString());
+		String token = JwtToken.createUserQCodeData(5L);
+		System.out.println(token);
 	}
 }  

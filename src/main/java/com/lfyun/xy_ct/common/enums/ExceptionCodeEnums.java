@@ -63,6 +63,9 @@ public enum ExceptionCodeEnums {
     LOGOUT_SUCCESS(35 , "登出成功"),
     
     USER_WITHDRAW_FAILED(40, "提现失败"),
+    
+    USER_BALANCE_NOT_ENOUGH(50, "用户余额不足"),
+    USER_DATA_ERROR(51, "用户二维码错误"),
     ;
 
     private Integer code;

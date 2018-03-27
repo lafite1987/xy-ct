@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lfyun.xy_ct.common.enums.ExceptionCodeEnums;
 import com.lfyun.xy_ct.common.util.JwtToken;
 import com.lfyun.xy_ct.entity.UserBalanceDetailEntity;
 import com.lfyun.xy_ct.entity.UserEntity;
+import com.lfyun.xy_ct.exception.AppException;
 import com.lfyun.xy_ct.mapper.UserBalanceDetailMapper;
 import com.lfyun.xy_ct.mapper.UserMapper;
 import com.lfyun.xy_ct.service.UserBalanceDetailService;
@@ -38,21 +40,24 @@ public class UserBalanceDetailServiceImpl extends ServiceImpl<UserBalanceDetailM
 	@Transactional
 	public void chargeOff(Long accountId, Double amount, String data) {
 		Long userId = JwtToken.verify(data);
+		if(userId == 0) {
+			throw new AppException(ExceptionCodeEnums.USER_DATA_ERROR);
+		}
 		LOGGER.info("消费 accountId:{} userId:{} amount:{}", accountId, userId, amount);
-		if(userId != 0) {
-			boolean result = userService.consume(userId, amount);
-			if(result) {
-				UserEntity userEntity = userService.selectById(userId);
-				UserBalanceDetailEntity userBalanceDetailEntity = new UserBalanceDetailEntity();
-				userBalanceDetailEntity.setUserId(userId);
-				userBalanceDetailEntity.setAmount(amount);
-				userBalanceDetailEntity.setBalance(userEntity.getBalance());
-				userBalanceDetailEntity.setType(2);
-				userBalanceDetailEntity.setBusinessType(2);
-				userBalanceDetailEntity.setState(1);
-				
-				this.baseMapper.insert(userBalanceDetailEntity);
-			}
+		boolean result = userService.consume(userId, amount);
+		if(result) {
+			UserEntity userEntity = userService.selectById(userId);
+			UserBalanceDetailEntity userBalanceDetailEntity = new UserBalanceDetailEntity();
+			userBalanceDetailEntity.setUserId(userId);
+			userBalanceDetailEntity.setAmount(amount);
+			userBalanceDetailEntity.setBalance(userEntity.getBalance());
+			userBalanceDetailEntity.setType(2);
+			userBalanceDetailEntity.setBusinessType(2);
+			userBalanceDetailEntity.setState(1);
+			
+			this.baseMapper.insert(userBalanceDetailEntity);
+		} else {
+			throw new AppException(ExceptionCodeEnums.USER_BALANCE_NOT_ENOUGH);
 		}
 	}
 	
