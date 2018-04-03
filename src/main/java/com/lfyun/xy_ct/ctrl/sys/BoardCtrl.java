@@ -17,7 +17,7 @@ import com.lfyun.xy_ct.service.BoardService.RechargeInfo;
 import jersey.repackaged.com.google.common.collect.Maps;
 
 @Controller
-@RequestMapping("/board")
+@RequestMapping("/sys/board")
 public class BoardCtrl {
 
 	@Autowired

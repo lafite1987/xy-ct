@@ -8,10 +8,10 @@ public interface UserCardService extends IService<UserCardEntity> {
 	/**
 	 * 添加卡券
 	 * @param userId
-	 * @param cardId
+	 * @param productId
 	 * @return
 	 */
-	boolean addUserCard(Long userId, Long cardId);
+	boolean addUserCardByProductId(Long userId, Long productId);
 	/**
 	 * 使用卡券
 	 * @param userId

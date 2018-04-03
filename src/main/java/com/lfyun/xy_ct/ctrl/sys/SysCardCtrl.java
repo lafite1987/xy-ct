@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.google.common.collect.Lists;
 import com.lfyun.xy_ct.common.DataWrapper;
 import com.lfyun.xy_ct.common.QueryDTO;
 import com.lfyun.xy_ct.common.Result;
+import com.lfyun.xy_ct.dto.CardDTO;
 import com.lfyun.xy_ct.entity.CardEntity;
 import com.lfyun.xy_ct.service.CardService;
 
@@ -77,12 +79,21 @@ public class SysCardCtrl {
 	
 	@RequestMapping(value = "/all.json", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<CardEntity>> all() {
-		EntityWrapper<CardEntity> wrapper = new EntityWrapper<CardEntity>(null);
+	public Result<List<CardDTO>> all() {
+		CardEntity entity = new CardEntity();
+		entity.setState(1);
+		EntityWrapper<CardEntity> wrapper = new EntityWrapper<CardEntity>(entity);
 		wrapper.orderBy("createTime", false);
 		List<CardEntity> list = cardService.selectList(wrapper);
-		Result<List<CardEntity>> result = Result.success();
-		result.setData(list);
+		List<CardDTO> arr = Lists.newArrayList();
+		for(CardEntity card : list) {
+			CardDTO cardDTO = new CardDTO();
+			cardDTO.setId(String.valueOf(card.getId()));
+			cardDTO.setTitle(card.getTitle());
+			arr.add(cardDTO);
+		}
+		Result<List<CardDTO>> result = Result.success();
+		result.setData(arr);
 		return result;
 	}
 }

@@ -11,6 +11,8 @@ public class UserShareDTO {
 	
 	private String description;
 	
+	private String timelineDescription;
+	
 	private String link;
 	
 	private String imageUrl;

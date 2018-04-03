@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lfyun.xy_ct.entity.OrderEntity;
 import com.lfyun.xy_ct.entity.ProductShareUserEntity;
 import com.lfyun.xy_ct.entity.UserEarningEntity;
+import com.lfyun.xy_ct.entity.UserEntity;
 import com.lfyun.xy_ct.mapper.UserEarningMapper;
 import com.lfyun.xy_ct.service.OrderService;
 import com.lfyun.xy_ct.service.ProductShareUserService;
@@ -48,14 +49,15 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 		
 	}
 	static {
-		earningConfigureCache.put("dev", new EarningConfigure(0.01, 0.01, 0.01));
-		earningConfigureCache.put("prod", new EarningConfigure(20, 5, 3));
+		earningConfigureCache.put("dev_1", new EarningConfigure(0.01, 0.01, 0.01));
+		earningConfigureCache.put("dev_2", new EarningConfigure(0.01, 0.01, 0));
+		earningConfigureCache.put("prod_1", new EarningConfigure(20, 5, 3));
+		earningConfigureCache.put("prod_2", new EarningConfigure(5, 3, 0));
 	}
 	
 	@Transactional
 	public void addEarning(Long orderId) {
 		String env = System.getProperty("earning.configure.env", "dev");
-		EarningConfigure earningConfigure = earningConfigureCache.get(env);
 		OrderEntity orderEntity = orderService.selectById(orderId);
 		if(orderEntity == null) {
 			LOGGER.warn("订单号【{}】没有找到", orderId);
@@ -75,8 +77,12 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 			return;
 		}
 		if(isAdd(parent.getParentUserId(), orderId)) {
-			addEarningRecord(parent.getParentUserId(), fromUserId, orderId, earningConfigure.getLevel1());
-			productShareUserService.addEarning(parent.getId(), earningConfigure.getLevel1());
+			UserEntity userEntity = userService.selectById(parent.getParentUserId());
+			if(userEntity != null) {
+				EarningConfigure earningConfigure = earningConfigureCache.get(env + "_" + userEntity.getUserType());
+				addEarningRecord(parent.getParentUserId(), fromUserId, orderId, earningConfigure.getLevel1());
+				productShareUserService.addEarning(parent.getId(), earningConfigure.getLevel1());
+			}
 		}
 		
 		//给fromUserId的邀请人的邀请人发收益
@@ -87,8 +93,12 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 			return;
 		}
 		if(isAdd(grandfather.getParentUserId(), orderId)) {
-			addEarningRecord(grandfather.getParentUserId(), fromUserId, orderId, earningConfigure.getLevel2());
-			productShareUserService.addEarning(grandfather.getId(), earningConfigure.getLevel2());
+			UserEntity userEntity = userService.selectById(grandfather.getParentUserId());
+			if(userEntity != null) {
+				EarningConfigure earningConfigure = earningConfigureCache.get(env + "_" + userEntity.getUserType());
+				addEarningRecord(grandfather.getParentUserId(), fromUserId, orderId, earningConfigure.getLevel2());
+				productShareUserService.addEarning(grandfather.getId(), earningConfigure.getLevel2());
+			}
 		}
 		
 		//给fromUserId的邀请人的邀请人的邀请人发收益
@@ -99,8 +109,16 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 			return;
 		}
 		if(isAdd(greatGrandfather.getParentUserId(), orderId)) {
-			addEarningRecord(greatGrandfather.getParentUserId(), fromUserId, orderId, earningConfigure.getLevel3());
-			productShareUserService.addEarning(greatGrandfather.getId(), earningConfigure.getLevel3());
+			UserEntity userEntity = userService.selectById(greatGrandfather.getParentUserId());
+			if(userEntity != null) {
+				EarningConfigure earningConfigure = earningConfigureCache.get(env + "_" + userEntity.getUserType());
+				if(userEntity.getUserType().intValue() != 2) {
+					addEarningRecord(greatGrandfather.getParentUserId(), fromUserId, orderId, earningConfigure.getLevel3());
+					productShareUserService.addEarning(greatGrandfather.getId(), earningConfigure.getLevel3());
+				}
+				
+			}
+			
 		}
 	}
 	

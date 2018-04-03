@@ -120,10 +120,11 @@ public class UserCtrl {
 		User user = sessionManager.getUser(request);
 		LOGGER.info("user={} share productId={}", user, productId);
 		UserShareDTO userShareDTO = new UserShareDTO();
-		userShareDTO.setTitle("充值活动");
-		userShareDTO.setDescription("充值即送优惠券，邀请好友返现！");
+		userShareDTO.setTitle("邀请好友共享优惠，特大惊喜等着你");
+		userShareDTO.setDescription("西域互联网共享餐厅，邀您一起来创业，不仅可以免费吃，还能有份不错的收入哦");
+		userShareDTO.setTimelineDescription("西域互联网共享餐厅，邀您一起来创业，不仅可以免费吃，还能有份不错的收入哦");
 		userShareDTO.setUserId(user.getId());
-		userShareDTO.setImageUrl("");
+		userShareDTO.setImageUrl(projectUrlConfig.getXyct() + "/wxp/images/logo.jpg");
 		String link = projectUrlConfig.getXyct() + "/wxp/recharge.htm?fromUserId=" + user.getId() + "&productId=" + productId;
 		userShareDTO.setLink(link);
 		Result<UserShareDTO> result = Result.success();

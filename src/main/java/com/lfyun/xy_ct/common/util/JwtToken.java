@@ -20,7 +20,7 @@ public class JwtToken {
             map.put("alg", "HS256");  
             map.put("typ", "JWT");  
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_MONTH, 3);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
             Date expiresAt = calendar.getTime();
             String token = JWT.create()  
                     .withHeader(map)//header  

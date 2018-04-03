@@ -13,9 +13,11 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lfyun.xy_ct.dto.InviteDTO;
 import com.lfyun.xy_ct.dto.InviteUserDTO;
 import com.lfyun.xy_ct.entity.ProductShareUserEntity;
+import com.lfyun.xy_ct.entity.ProductUserRelationEntity;
 import com.lfyun.xy_ct.entity.UserEntity;
 import com.lfyun.xy_ct.mapper.ProductShareUserMapper;
 import com.lfyun.xy_ct.service.ProductShareUserService;
+import com.lfyun.xy_ct.service.ProductUserRelationService;
 import com.lfyun.xy_ct.service.UserService;
 
 import jersey.repackaged.com.google.common.collect.Lists;
@@ -28,15 +30,8 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 	@Autowired
 	private UserService userService;
 	
-	private ProductShareUserEntity getByUserIdAndProductId(Long userId, Integer level, Long productId) {
-		ProductShareUserEntity entity = new ProductShareUserEntity();
-		entity.setLevel(level);
-		entity.setUserId(userId);
-		entity.setProductId(productId);
-		EntityWrapper<ProductShareUserEntity> wrapper = new EntityWrapper<ProductShareUserEntity>(entity);
-		ProductShareUserEntity productShareUserEntity = selectOne(wrapper);
-		return productShareUserEntity;
-	}
+	@Autowired
+	private ProductUserRelationService productUserRelationService;
 	
 	/**
 	 * 创建分销关系：
@@ -45,58 +40,80 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 	 * @param userId
 	 */
 	public void createRelation(Long productId, Long parentUserId, Long userId) {
-		if(parentUserId == null || parentUserId == 0L || productId == null 
-				|| productId == 0L || userId == null || userId == 0L) {
-			LOGGER.warn("传入参数非法：productId:{} parentUserId:{} userId:{}", productId, parentUserId, userId);
+		if(productId == null || productId == 0L || userId == null || userId == 0L) {
+			LOGGER.warn("传入参数非法：productId:{} userId:{}", productId, userId);
 			return;
 		}
-		if(isHasRelation(parentUserId, userId)) {
-			LOGGER.warn("productId:{} userId:{} and parentUserId:{} had relation", productId, userId, parentUserId);
+		ProductUserRelationEntity productUserRelationEntity = new ProductUserRelationEntity();
+		productUserRelationEntity.setProductId(productId);
+		productUserRelationEntity.setUserId(userId);
+		EntityWrapper<ProductUserRelationEntity> wrapper = new EntityWrapper<ProductUserRelationEntity>(productUserRelationEntity);
+		ProductUserRelationEntity productUserRelationEntity2 = productUserRelationService.selectOne(wrapper);
+		if(productUserRelationEntity2 != null) {
+			return ;
+		}
+		if(parentUserId == null) {
+			parentUserId = 0L;
+		}
+		productUserRelationEntity.setUserId(parentUserId);
+		ProductUserRelationEntity userParent = productUserRelationService.selectOne(wrapper);
+		if(userParent == null) {
+			parentUserId = 0L;
+		}
+		productUserRelationEntity2 = new ProductUserRelationEntity();
+		productUserRelationEntity2.setProductId(productId);
+		productUserRelationEntity2.setUserId(userId);
+		productUserRelationEntity2.setParentUserId(parentUserId);
+		productUserRelationService.insert(productUserRelationEntity2);
+		if(parentUserId == 0L) {
 			return;
 		}
+		
 		//一级分销
 		int level1 = 1;
-		ProductShareUserEntity productShareUserEntity = getByUserIdAndProductId(userId, level1, productId);
-		if(productShareUserEntity == null) {
-			productShareUserEntity = new ProductShareUserEntity();
-			productShareUserEntity.setProductId(productId);
-			productShareUserEntity.setParentUserId(parentUserId);
-			productShareUserEntity.setLevel(level1);
-			productShareUserEntity.setUserId(userId);
-			insert(productShareUserEntity);
+		if(userParent == null) {
+			return;
 		}
+		ProductShareUserEntity productShareUserEntity = new ProductShareUserEntity();
+		productShareUserEntity.setProductId(productId);
+		productShareUserEntity.setParentUserId(userParent.getUserId());
+		productShareUserEntity.setLevel(level1);
+		productShareUserEntity.setUserId(userId);
+		insert(productShareUserEntity);
 		
+		if(userParent.getParentUserId() == 0L) {
+			return;
+		}
 		//二级分销
 		int level2 = 2;
-		ProductShareUserEntity productShareUserEntity2 = getByUserIdAndProductId(userId, level2, productId);
-		if(productShareUserEntity2 == null) {
-			ProductShareUserEntity parent = getByUserIdAndProductId(parentUserId, level1, productId);
-			if(parent != null) {
-				productShareUserEntity2 = new ProductShareUserEntity();
-				productShareUserEntity2.setProductId(productId);
-				productShareUserEntity2.setParentUserId(parent.getParentUserId());
-				productShareUserEntity2.setLevel(level2);
-				productShareUserEntity2.setUserId(userId);
-				insert(productShareUserEntity2);
-			}
+		productUserRelationEntity.setUserId(userParent.getParentUserId());
+		ProductUserRelationEntity userGrandfather = productUserRelationService.selectOne(wrapper);
+		if(userGrandfather == null) {
+			return;
 		}
+		ProductShareUserEntity productShareUserEntity2 = new ProductShareUserEntity();
+		productShareUserEntity2.setProductId(productId);
+		productShareUserEntity2.setParentUserId(userGrandfather.getUserId());
+		productShareUserEntity2.setLevel(level2);
+		productShareUserEntity2.setUserId(userId);
+		insert(productShareUserEntity2);
 		
-		//三级分销
-		if(productShareUserEntity2 != null) {
-			int level3 = 3;
-			ProductShareUserEntity productShareUserEntity3 = getByUserIdAndProductId(userId, level3, productId);
-			if(productShareUserEntity3 == null) {
-				ProductShareUserEntity parent = getByUserIdAndProductId(productShareUserEntity2.getParentUserId(), level1, productId);
-				if(parent != null) {
-					productShareUserEntity3 = new ProductShareUserEntity();
-					productShareUserEntity3.setProductId(productId);
-					productShareUserEntity3.setParentUserId(parent.getParentUserId());
-					productShareUserEntity3.setLevel(level3);
-					productShareUserEntity3.setUserId(userId);
-					insert(productShareUserEntity3);
-				}
-			}
+		if(userGrandfather.getParentUserId() == 0L) {
+			return;
 		}
+		//三级分销
+		productUserRelationEntity.setUserId(userGrandfather.getParentUserId());
+		ProductUserRelationEntity userGreatGrandfather = productUserRelationService.selectOne(wrapper);
+		if(userGreatGrandfather == null) {
+			return ;
+		}
+		int level3 = 3;
+		ProductShareUserEntity productShareUserEntity3 = new ProductShareUserEntity();
+		productShareUserEntity3.setProductId(productId);
+		productShareUserEntity3.setParentUserId(userGreatGrandfather.getUserId());
+		productShareUserEntity3.setLevel(level3);
+		productShareUserEntity3.setUserId(userId);
+		insert(productShareUserEntity3);
 	}
 
 	@Override
@@ -104,17 +121,6 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 		this.baseMapper.addEarning(id, earning);
 	}
 	
-	private boolean isHasRelation(Long parentUserId, Long userId) {
-		ProductShareUserEntity entity = new ProductShareUserEntity();
-		entity.setParentUserId(userId);
-		entity.setUserId(parentUserId);
-		EntityWrapper<ProductShareUserEntity> wrapper = new EntityWrapper<ProductShareUserEntity>(entity);
-		int count = this.selectCount(wrapper);
-		if(count > 0) {
-			return true;
-		}
-		return false;
-	}
 	public InviteDTO inviteList(Long userId, Long productId) {
 		ProductShareUserEntity entity = new ProductShareUserEntity();
 		entity.setLevel(1);

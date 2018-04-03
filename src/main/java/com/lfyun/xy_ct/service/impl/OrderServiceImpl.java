@@ -48,7 +48,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderEntity> imple
 		userEarningService.addEarning(orderEntity.getId());
 		ProductEntity productEntity = productService.selectById(order.getProductId());
 		if(productEntity != null) {
-			userCardService.addUserCard(order.getUserId(), productEntity.getCardId());
+			userCardService.addUserCardByProductId(order.getUserId(), productEntity.getId());
 		}
 	}
 

@@ -66,6 +66,8 @@ public enum ExceptionCodeEnums {
     
     USER_BALANCE_NOT_ENOUGH(50, "用户余额不足"),
     USER_DATA_ERROR(51, "用户二维码错误"),
+    
+    USERNAME_OR_PASSWORD_ERROR(401, "用户名或密码不正确"),
     ;
 
     private Integer code;

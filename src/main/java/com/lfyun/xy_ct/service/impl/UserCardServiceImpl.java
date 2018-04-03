@@ -1,13 +1,18 @@
 package com.lfyun.xy_ct.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lfyun.xy_ct.entity.CardEntity;
+import com.lfyun.xy_ct.entity.ProductCardEntity;
 import com.lfyun.xy_ct.entity.UserCardEntity;
 import com.lfyun.xy_ct.mapper.UserCardMapper;
 import com.lfyun.xy_ct.service.CardService;
+import com.lfyun.xy_ct.service.ProductCardService;
 import com.lfyun.xy_ct.service.UserCardService;
 
 @Service
@@ -16,18 +21,36 @@ public class UserCardServiceImpl extends ServiceImpl<UserCardMapper,UserCardEnti
 	@Autowired
 	private CardService cardService;
 	
+	@Autowired
+	private ProductCardService productCardService;
+	
 	@Override
-	public boolean addUserCard(Long userId, Long cardId) {
-		if(cardId == null || cardId <= 0) {
+	public boolean addUserCardByProductId(Long userId, Long productId) {
+		if(productId == null || productId <= 0) {
 			return false;
 		}
-		UserCardEntity userCardEntity = new UserCardEntity();
-		userCardEntity.setUserId(userId);
-		userCardEntity.setCardId(cardId);
-		userCardEntity.setState(1);
-		userCardEntity.setOwnCount(1);
-		userCardEntity.setUsedCount(0);
-		boolean result = this.insert(userCardEntity);
+		ProductCardEntity productCardEntity = new ProductCardEntity();
+		productCardEntity.setProductId(productId);
+		EntityWrapper<ProductCardEntity> wrapper = new EntityWrapper<ProductCardEntity>(productCardEntity);
+		List<ProductCardEntity> selectList = productCardService.selectList(wrapper);
+		boolean result = true;
+		for(ProductCardEntity entity : selectList) {
+			CardEntity cardEntity = cardService.selectById(entity.getCardId());
+			long time = System.currentTimeMillis();
+			if(cardEntity != null && cardEntity.getState() == 1 
+					&& cardEntity.getBeginIssuedTime() <= time && time <= cardEntity.getEndIssuedTime()) {
+				for(int i = 0; i < entity.getCount(); i++) {
+					UserCardEntity userCardEntity = new UserCardEntity();
+					userCardEntity.setUserId(userId);
+					userCardEntity.setCardId(entity.getCardId());
+					userCardEntity.setState(1);
+					userCardEntity.setOwnCount(1);
+					userCardEntity.setUsedCount(0);
+					boolean ret = this.insert(userCardEntity);
+					result = result && ret;
+				}
+			}
+		}
 		return result;
 	}
 

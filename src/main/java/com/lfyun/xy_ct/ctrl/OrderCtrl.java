@@ -90,16 +90,24 @@ public class OrderCtrl {
 			return "redirect:" + redirectUrl;
 		}
 		ProductEntity productEntity = productService.selectById(productId);
-		if(StringUtils.isNotBlank(fromUserId) && !String.valueOf(user.getId()).equals(fromUserId)) {
+		if(StringUtils.isBlank(fromUserId) || (StringUtils.isNotBlank(fromUserId) && !String.valueOf(user.getId()).equals(fromUserId))) {
 			try {
-				Long parentUserId = Long.parseLong(fromUserId);
+				Long parentUserId = 0L;
+				try {
+					if(StringUtils.isNotBlank(fromUserId)) {
+						parentUserId = Long.parseLong(fromUserId);
+					}
+				} catch (Exception e) {
+				}
 				productShareUserService.createRelation(productId, parentUserId, user.getId());
+				
 				String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge.htm?fromUserId=" + user.getId() + "&productId=" + productId;
 				return "redirect:" + returnUrl;
 			} catch (Exception e) {
 				LOGGER.error("更新用户推荐人错误:userId:{} fromUserId:{}", user.getId(), fromUserId, e);
 			}
 		}
+		
 		if(StringUtils.isBlank(fromUserId)) {
 			String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge.htm?fromUserId=" + user.getId() + "&productId=" + productId;
 			return "redirect:" + returnUrl;

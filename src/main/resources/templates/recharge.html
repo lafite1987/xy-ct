@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>大盘鸡</title>
+    <title>新疆主题餐厅活动</title>
     <link rel="stylesheet" href="../static/dapanji/css/all.css" th:href="@{/dapanji/css/all.css?t=123}"/>
     <link rel="stylesheet" href="../static/dapanji/css/animate.css" th:href="@{/dapanji/css/animate.css}"/>
     <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
@@ -22,7 +22,7 @@
             <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-three-img"/>
             <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-four-img"/>
             <div class="title-one"></div>
-            <div class="content">充值198元，全部可用于消费，还可<span class="big-font">额外获赠</span>“价值68元的大盘鸡”一份哦！</div>
+            <div class="content">充值198元，全部可用于消费，还可<span class="big-font">额外获赠</span>“价值100元优惠券”4张哦！</div>
             <input type="hidden" id="productId" name="productId" th:value="${productId}" />
             <input type="hidden" id="shareLink" name="shareLink" th:value="${shareLink}" />
             <div class="btn" onclick="linkToreCharge()">立即充值</div>
@@ -40,7 +40,7 @@
             <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-three-img"/>
             <img src="../static/dapanji/img/juhui-jiao.png" th:src="@{/dapanji/img/juhui-jiao.png}" class="juhui-four-img"/>
             <div class="title-two"></div>
-            <div class="content">将此优惠分享给其他好友，并教会他们也分享出去，不仅让大家共享如此钜惠，更能让大家一起来<span class="big-font">免费吃！吃！吃！</span></div>
+            <div class="content">将此优惠分享给其他好友，并教会他们也分享出去，不仅让大家共享福利，更能让大家一起来<span class="big-font">免费吃！</span></div>
             <div class="btn" onclick="showShareLayer()">邀请好友，拿奖励</div>
         </div>
         <div class="share-users">
@@ -50,7 +50,7 @@
             <img src="../static/dapanji/img/two-line.png" th:src="@{/dapanji/img/two-line.png}" class="share-line-right"/>
         </div>
         <div class="address">
-            店铺地址：永州万达广场西域新疆主题餐厅XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+            店铺地址：重庆市永川区星光大道 787 号(步行街 3F 层 3039 号)
         </div>
     </div>
     <div class="bottom-body">1111111111111111111111</div>
@@ -65,7 +65,7 @@
         <img src="../static/dapanji/img/active-rule.png" th:src="@{/dapanji/img/active-rule.png}" class="active-rulr"/>
         <div class="flex-row">
             <div class="row-left">1.</div>
-            <div class="row-right">充值198元，全部可用于消费，还可额外获赠“价值68元的大盘鸡”一份哦！</div>
+            <div class="row-right">充值198立享100元优惠券，优惠券四张，30 元的两张午市抵用券，20元两张全天抵用券，有效期3个月，消费满88即可抵用</div>
         </div>
         <div class="flex-row">
             <div class="row-left">2.</div>
@@ -90,6 +90,9 @@
 <!--付款二维码弹窗 start-->
 <div class="pop-layer" onclick="closeLayer('payLayer')" id="payLayer">
     <div class="content" id="pop-con1">
+     <div class="close-wrap" onclick="closeLayer('payLayer')">
+            <div class="close-layer"> </div>
+        </div>
         <div class="rq-div">
             <img src="" class="rQimg" id="myPayQrCodeImg"/>
         </div>
@@ -99,6 +102,9 @@
 <!--分享二维码弹窗 start-->
 <div class="pop-layer" onclick="closeLayer('shareRQLayer')" id="shareRQLayer">
     <div class="content" id="pop-con2">
+     <div class="close-wrap" onclick="closeLayer('shareRQLayer')">
+            <div class="close-layer"> </div>
+        </div>
         <div  class="rq-div">
             <img src="" class="rQimg" id="myShareQrCodeImg"/>
         </div>

@@ -16,7 +16,7 @@ public class ExceptionHandlerAdvice {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
 	
     @ExceptionHandler(value = { Throwable.class })
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(value = HttpStatus.OK)
     public Object handleOtherExceptions(final Exception ex, final ServletWebRequest req) {
     	Result<Void> result = null;
     	if(ex instanceof AppException) {
