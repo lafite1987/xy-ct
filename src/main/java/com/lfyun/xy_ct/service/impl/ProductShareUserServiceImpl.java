@@ -181,7 +181,16 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 	@Override
 	public MyInviteDTO getByUserId(Long productId, Long userId) {
 		MyInviteDTO myInviteDTO = this.baseMapper.getByUserId(productId, userId);
-		return null;
+		if(myInviteDTO == null) {
+			myInviteDTO = new MyInviteDTO();
+			myInviteDTO.setCount(0);
+			myInviteDTO.setEarning(0D);
+		} else {
+			if(myInviteDTO.getEarning() == null) {
+				myInviteDTO.setEarning(0D);
+			}
+		}
+		return myInviteDTO;
 	}
 
 }

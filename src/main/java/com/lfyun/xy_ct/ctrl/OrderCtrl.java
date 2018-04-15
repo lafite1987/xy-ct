@@ -155,7 +155,7 @@ public class OrderCtrl {
 			String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge2.htm?fromUserId=" + user.getId() + "&productId=" + productId;
 			return "redirect:" + returnUrl;
 		}
-		String link = projectUrlConfig.getXyct() + "/recharge.htm?fromUserId=" + user.getId() + "&productId=" + productId;
+		String link = projectUrlConfig.getXyct() + "/recharge2.htm?fromUserId=" + user.getId() + "&productId=" + productId;
 		model.addAttribute("shareLink", link);
 		model.addAttribute("productId", productId);
 		model.addAttribute("price", productEntity.getPrice());

@@ -63,7 +63,7 @@ public enum ExceptionCodeEnums {
     LOGOUT_SUCCESS(35 , "登出成功"),
     
     USER_WITHDRAW_FAILED(40, "提现失败"),
-    USER_WITHDRAW_FAILED_2(41, "提现失败，由于微信企业发放红包给用户需要微信支付商户进驻微信支付满3个月才能使用该接口功能"),
+    USER_WITHDRAW_FAILED_2(41, "提现失败，由于微信企业发放红包给用户需要微信支付商户进驻微信支付满3个月才能使用该接口功能,请您3个月后再来提现！"),
     
     USER_BALANCE_NOT_ENOUGH(50, "用户余额不足"),
     USER_DATA_ERROR(51, "用户二维码错误"),
