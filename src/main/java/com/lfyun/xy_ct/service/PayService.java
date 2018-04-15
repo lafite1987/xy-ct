@@ -1,5 +1,7 @@
 package com.lfyun.xy_ct.service;
 
+import java.util.Map;
+
 import com.lfyun.xy_ct.dto.OrderDTO;
 import com.lly835.bestpay.model.PayResponse;
 import com.lly835.bestpay.model.RefundResponse;
@@ -19,7 +21,7 @@ public interface PayService {
      * 处理异步通知
      * @param notifyData
      */
-    PayResponse notify(String notifyData);
+    Map<String, String> notify(String notifyData);
 
     RefundResponse refund(OrderDTO orderDTO);
 }

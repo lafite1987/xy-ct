@@ -86,7 +86,8 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 		}
 		
 		//给fromUserId的邀请人的邀请人发收益
-		productShareUserEntity.setUserId(parent.getParentUserId());
+		productShareUserEntity.setUserId(fromUserId);
+		productShareUserEntity.setLevel(2);
 		ProductShareUserEntity grandfather = productShareUserService.selectOne(wrapper);
 		if(grandfather == null) {
 			LOGGER.warn("未找到用户【id={}】的邀请人【id={}】的邀请人", fromUserId, parent.getParentUserId());
@@ -102,7 +103,8 @@ public class UserEarningServiceImpl extends ServiceImpl<UserEarningMapper,UserEa
 		}
 		
 		//给fromUserId的邀请人的邀请人的邀请人发收益
-		productShareUserEntity.setUserId(grandfather.getParentUserId());
+		productShareUserEntity.setUserId(fromUserId);
+		productShareUserEntity.setLevel(3);
 		ProductShareUserEntity greatGrandfather = productShareUserService.selectOne(wrapper);
 		if(greatGrandfather == null) {
 			LOGGER.warn("未找到用户【id={}】的邀请人【id={}】的邀请人", fromUserId, grandfather.getParentUserId());
