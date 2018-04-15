@@ -1,40 +1,59 @@
 package com.lfyun.xy_ct.service;
 
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.lfyun.xy_ct.common.User;
+import com.lfyun.xy_ct.common.util.JwtToken;
+import com.lfyun.xy_ct.entity.UserEntity;
 
 @Component
 public class SessionManager {
 
-	private static LoadingCache<String, User> CACHE = CacheBuilder.newBuilder()
+	@Autowired
+	private UserService userService;
+	
+	private LoadingCache<Long, User> CACHE = CacheBuilder.newBuilder()
 			.expireAfterWrite(1, TimeUnit.DAYS).maximumSize(100000)
-			.build(new CacheLoader<String, User>(){
+			.build(new CacheLoader<Long, User>(){
 		@Override
-		public User load(String key) throws Exception {
-			
-			return null;
+		public User load(Long userId) throws Exception {
+			User user = getByUserId(userId);
+			return user;
 		}});
 	
+	public User getByUserId(Long userId) {
+		UserEntity userEntity = userService.selectById(userId);
+		if(userEntity != null) {
+			User user = new User();
+			user.setOpenid(userEntity.getOpenid());
+			user.setId(userId);
+			user.setAvatar(userEntity.getAvatar());
+			user.setNickname(userEntity.getNickname());
+			return user;
+		}
+		return null;
+	}
 	public void save(User user, HttpServletResponse response) {
-		String token = UUID.randomUUID().toString();
+//		String token = UUID.randomUUID().toString();
+		String token = JwtToken.createToken(user.getId());
 		response.setHeader("token", token);
 		Cookie cookie = new Cookie("token", token);
         cookie.setMaxAge(24*60*60);
         cookie.setHttpOnly(false);
         cookie.setPath("/");
         response.addCookie(cookie);
-        CACHE.put(token, user);
+        CACHE.put(user.getId(), user);
 	}
 	
 	public User getUser(HttpServletRequest request) {
@@ -50,8 +69,12 @@ public class SessionManager {
 				}
 			}
 		}
-		if(token != null) {
-			User user = CACHE.getIfPresent(token);
+		if(StringUtils.isNotBlank(token)) {
+			Long userId = JwtToken.verify(token);
+			if(userId == null) {
+				return null;
+			}
+			User user = CACHE.getIfPresent(userId);
 			return user;
 		}
 		return null;

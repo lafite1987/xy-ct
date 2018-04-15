@@ -11,6 +11,8 @@ function withdraw() {
         	if(data.code == 200) {
         		$("#noWithdrawEarning").text(0);
         		alert("提现成功");
+        	} else {
+        		alert(data.message);
         	}
         }
 	});
@@ -60,9 +62,18 @@ function addCloseMore(data, position, ele) {
 }
 function appendImgs(imgs, ele) {
 	imgs.forEach(function(img, index, array) {
-		var imgEle = document.createElement("img");
-		imgEle.src = img.avatar;
-		ele.appendChild(imgEle);
+//		var imgEle = document.createElement("img");
+//		imgEle.src = img.avatar;
+//		ele.appendChild(imgEle);
+		
+		var divEle = document.createElement("div");
+		if(img.recharge == true) {
+			divEle.className += "is-user";
+		}
+        var imgEle = document.createElement("img");
+        imgEle.src = img.avatar;
+        divEle.appendChild(imgEle);
+        ele.appendChild(divEle);
 	});
 }
 function getIndex(value) {

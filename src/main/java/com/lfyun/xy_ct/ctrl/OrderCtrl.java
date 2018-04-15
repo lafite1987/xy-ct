@@ -85,7 +85,7 @@ public class OrderCtrl {
 		if(user == null) {
 			//1.配置微信公众号信息
 			String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge.htm?fromUserId=" + fromUserId + "&productId=" + productId;
-	        String url = projectUrlConfig.getMpAuthorizeUrl()+"/wxp/wechat/userInfo";
+	        String url = projectUrlConfig.getMpAuthorizeUrl() + "/wxp/wechat/userInfo";
 	        String redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAUTH2_SCOPE_USER_INFO, URLEncoder.encode(returnUrl));
 			return "redirect:" + redirectUrl;
 		}
@@ -116,7 +116,52 @@ public class OrderCtrl {
 		model.addAttribute("shareLink", link);
 		model.addAttribute("productId", productId);
 		model.addAttribute("price", productEntity.getPrice());
+		model.addAttribute("recharge", orderService.isRecharge(productId, user.getId()));
+		model.addAttribute("myInvite", productShareUserService.getByUserId(productId, user.getId()));
 		return "recharge";
+	}
+	
+	@RequestMapping(value = "recharge2.htm", method = RequestMethod.GET)
+	public String recharge2(@RequestParam(name = "fromUserId", defaultValue = "", required = false)String fromUserId, 
+			@RequestParam(name = "productId", defaultValue = "", required = false)Long productId, Model model, HttpServletRequest request) {
+		User user = sessionManager.getUser(request);
+		if(user == null) {
+			//1.配置微信公众号信息
+			String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge2.htm?fromUserId=" + fromUserId + "&productId=" + productId;
+	        String url = projectUrlConfig.getMpAuthorizeUrl() + "/wxp/wechat/userInfo";
+	        String redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAUTH2_SCOPE_USER_INFO, URLEncoder.encode(returnUrl));
+			return "redirect:" + redirectUrl;
+		}
+		ProductEntity productEntity = productService.selectById(productId);
+		if(StringUtils.isBlank(fromUserId) || (StringUtils.isNotBlank(fromUserId) && !String.valueOf(user.getId()).equals(fromUserId))) {
+			try {
+				Long parentUserId = 0L;
+				try {
+					if(StringUtils.isNotBlank(fromUserId)) {
+						parentUserId = Long.parseLong(fromUserId);
+					}
+				} catch (Exception e) {
+				}
+				productShareUserService.createRelation(productId, parentUserId, user.getId());
+				
+				String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge2.htm?fromUserId=" + user.getId() + "&productId=" + productId;
+				return "redirect:" + returnUrl;
+			} catch (Exception e) {
+				LOGGER.error("更新用户推荐人错误:userId:{} fromUserId:{}", user.getId(), fromUserId, e);
+			}
+		}
+		
+		if(StringUtils.isBlank(fromUserId)) {
+			String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/recharge2.htm?fromUserId=" + user.getId() + "&productId=" + productId;
+			return "redirect:" + returnUrl;
+		}
+		String link = projectUrlConfig.getXyct() + "/recharge.htm?fromUserId=" + user.getId() + "&productId=" + productId;
+		model.addAttribute("shareLink", link);
+		model.addAttribute("productId", productId);
+		model.addAttribute("price", productEntity.getPrice());
+		model.addAttribute("recharge", orderService.isRecharge(productId, user.getId()));
+		model.addAttribute("myInvite", productShareUserService.getByUserId(productId, user.getId()));
+		return "recharge2";
 	}
 	
 	@RequestMapping(value = "order-detail.htm", method = RequestMethod.GET)

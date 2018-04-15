@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lfyun.xy_ct.dto.InviteDTO;
 import com.lfyun.xy_ct.dto.InviteUserDTO;
+import com.lfyun.xy_ct.dto.MyInviteDTO;
 import com.lfyun.xy_ct.entity.ProductShareUserEntity;
 import com.lfyun.xy_ct.entity.ProductUserRelationEntity;
 import com.lfyun.xy_ct.entity.UserEntity;
@@ -166,7 +167,8 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 		if(list != null) {
 			for(ProductShareUserEntity entity : list) {
 				UserEntity userEntity = map.get(entity.getUserId());
-				InviteUserDTO inviteUserDTO = new InviteUserDTO(entity.getUserId(), userEntity.getAvatar(), entity.getEarning());
+				Boolean recharge = entity.getEarning() > 0 ? true : false;
+				InviteUserDTO inviteUserDTO = new InviteUserDTO(entity.getUserId(), userEntity.getAvatar(), entity.getEarning(), recharge);
 				levelList.add(inviteUserDTO);
 				earning += entity.getEarning();
 			}
@@ -174,6 +176,12 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 		wrapper.level = levelList;
 		wrapper.earning = earning;
 		return wrapper;
+	}
+
+	@Override
+	public MyInviteDTO getByUserId(Long productId, Long userId) {
+		MyInviteDTO myInviteDTO = this.baseMapper.getByUserId(productId, userId);
+		return null;
 	}
 
 }

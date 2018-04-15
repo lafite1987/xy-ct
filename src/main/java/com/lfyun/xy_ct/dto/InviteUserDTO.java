@@ -12,4 +12,6 @@ public class InviteUserDTO {
 	private String avatar;
 	
 	private Double earning;
+	
+	private Boolean recharge;
 }

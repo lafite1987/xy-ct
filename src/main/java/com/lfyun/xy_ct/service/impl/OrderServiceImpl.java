@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lfyun.xy_ct.common.enums.PayStatusEnums;
 import com.lfyun.xy_ct.dto.OrderDTO;
@@ -69,6 +70,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderEntity> imple
 			return orderDTO;
 		}
 		return null;
+	}
+
+	@Override
+	public boolean isRecharge(Long productId, Long userId) {
+		OrderEntity entity = new OrderEntity();
+		entity.setProductId(productId);
+		entity.setUserId(userId);
+		entity.setPayStatus(3);
+		EntityWrapper<OrderEntity> wrapper = new EntityWrapper<OrderEntity>(entity);
+		int count = this.selectCount(wrapper);
+		return count > 0 ? true : false;
 	}
 
 }

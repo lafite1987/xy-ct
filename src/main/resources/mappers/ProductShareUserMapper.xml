@@ -4,4 +4,7 @@
 <update id="addEarning">
 UPDATE t_product_share_user SET earning = earning + #{earning} WHERE id = #{id}
 </update>
+<select id="getByUserId" resultType="com.lfyun.xy_ct.dto.MyInviteDTO">
+SELECT COUNT(0) AS num, SUM(earning) FROM t_product_share_user WHERE productId = #{productId} AND parentUserId = ${userId}
+</select>
 </mapper>

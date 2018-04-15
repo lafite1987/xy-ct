@@ -9,7 +9,7 @@
 <body>
 <div class="present-wrap" id="presentList">
 
-    <div th:attr="class=${userCard.classStyle}" class="list-item" th:each="userCard : ${userCardList}">
+    <div th:id="${userCard.id}" th:attr="class=${userCard.classStyle}" class="list-item" th:each="userCard : ${userCardList}">
         <div class="item-top">
             <input type="hidden" id="userCardId" th:value="${userCard.id}"/>
             <div class="one"><span class="num" th:text="${userCard.reduceCost}">30</span>元</div>
@@ -30,5 +30,5 @@
 </div>
 </body>
 <script src="../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
-<script src="../static/js/myCard.js" th:src="@{/js/myCard.js?v=1245}"></script>
+<script src="../static/js/myCard.js" th:src="@{/js/myCard.js?v=12456}"></script>
 </html>

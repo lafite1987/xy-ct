@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.lfyun.xy_ct.dto.MyInviteDTO;
 import com.lfyun.xy_ct.entity.ProductShareUserEntity;
 
 @Repository
@@ -16,4 +17,6 @@ public interface ProductShareUserMapper extends BaseMapper<ProductShareUserEntit
 	 * @return
 	 */
 	int addEarning(@Param("id")Long id, @Param("earning")Double earning);
+	
+	MyInviteDTO getByUserId(@Param("productId")Long productId, @Param("userId")Long userId);
 }

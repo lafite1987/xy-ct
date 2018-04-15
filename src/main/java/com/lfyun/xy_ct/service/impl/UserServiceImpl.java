@@ -81,6 +81,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implemen
 					updateWithdrawEntity.setId(userEarningEntity.getId());
 					updateWithdrawEntity.setState(3);
 					userEarningService.updateById(updateWithdrawEntity);
+				} else if(weiXinResultXMLBean.getErr_code_des().contains("产品权限验证失败")){
+					UserEarningEntity updateWithdrawEntity = new UserEarningEntity();
+					updateWithdrawEntity.setId(userEarningEntity.getId());
+					updateWithdrawEntity.setState(4);
+					userEarningService.updateById(updateWithdrawEntity);
+					throw new AppException(ExceptionCodeEnums.USER_WITHDRAW_FAILED_2);
 				} else {
 					UserEarningEntity updateWithdrawEntity = new UserEarningEntity();
 					updateWithdrawEntity.setId(userEarningEntity.getId());
@@ -88,7 +94,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,UserEntity> implemen
 					userEarningService.updateById(updateWithdrawEntity);
 					throw new AppException(ExceptionCodeEnums.USER_WITHDRAW_FAILED);
 				}
+			} else {
+				throw new AppException(ExceptionCodeEnums.USER_BALANCE_NOT_ENOUGH);
 			}
+		} else {
+			throw new AppException(ExceptionCodeEnums.USER_BALANCE_NOT_ENOUGH);
 		}
 	}
 

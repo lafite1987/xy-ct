@@ -138,7 +138,7 @@ public class UserCtrl {
 		if(user == null) {
 			//1.配置微信公众号信息
 			String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/wxp/user/myCard.htm";
-	        String url = projectUrlConfig.getMpAuthorizeUrl()+"/wxp/wechat/userInfo";
+	        String url = projectUrlConfig.getMpAuthorizeUrl() + "/wxp/wechat/userInfo";
 	        String redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAUTH2_SCOPE_USER_INFO, URLEncoder.encode(returnUrl));
 			return "redirect:" + redirectUrl;
 		}

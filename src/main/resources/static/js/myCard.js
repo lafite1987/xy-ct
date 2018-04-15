@@ -7,6 +7,7 @@ function useTicket(userCardId) {
 	          dataType : 'json',
 	          success : function(data) {
 	              if (data.code == 200) {
+	            	  $("#" + userCardId).addClass("userd");
 	            	  alert("卡券使用成功");
 	              }
 	          }

@@ -9,4 +9,12 @@ public interface OrderService extends IService<OrderEntity> {
 	void pay(OrderDTO orderDTO);
 	
 	OrderDTO getByOrderId(String orderId);
+	
+	/**
+	 * 判断用户是否充值
+	 * @param Long productId
+	 * @param userId
+	 * @return
+	 */
+	boolean isRecharge(Long productId, Long userId);
 }
