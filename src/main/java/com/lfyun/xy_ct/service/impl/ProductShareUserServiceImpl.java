@@ -138,9 +138,13 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 		parse(selectList2, allUserIdList);
 		parse(selectList3, allUserIdList);
 		Map<Long, UserEntity> map = userService.getByIds(allUserIdList);
-		Wrapper wrapper1 = convert(selectList1, map);
-		Wrapper wrapper2 = convert(selectList2, map);
-		Wrapper wrapper3 = convert(selectList3, map);
+		Wrapper wrapper1 = convert(selectList1, map, 1);
+		Wrapper wrapper2 = convert(selectList2, map, 2);
+		Wrapper wrapper3 = convert(selectList3, map, 3);
+		
+		wrapper2.earning += wrapper3.earning;
+		wrapper2.level.addAll(wrapper3.level);
+		
 		InviteDTO inviteDTO = new InviteDTO();
 		inviteDTO.setLevel1Earning(wrapper1.earning);
 		inviteDTO.setLevel1(wrapper1.level);
@@ -160,7 +164,7 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 			all.add(entity.getUserId());
 		}
 	}
-	private Wrapper convert(List<ProductShareUserEntity> list, Map<Long, UserEntity> map) {
+	private Wrapper convert(List<ProductShareUserEntity> list, Map<Long, UserEntity> map, Integer level) {
 		Wrapper wrapper = new Wrapper();
 		List<InviteUserDTO> levelList = Lists.newArrayList();
 		Double earning = 0D;
@@ -168,7 +172,7 @@ public class ProductShareUserServiceImpl extends ServiceImpl<ProductShareUserMap
 			for(ProductShareUserEntity entity : list) {
 				UserEntity userEntity = map.get(entity.getUserId());
 				Boolean recharge = entity.getEarning() > 0 ? true : false;
-				InviteUserDTO inviteUserDTO = new InviteUserDTO(entity.getUserId(), userEntity.getAvatar(), entity.getEarning(), recharge);
+				InviteUserDTO inviteUserDTO = new InviteUserDTO(entity.getUserId(), userEntity.getAvatar(), entity.getEarning(), recharge, level);
 				levelList.add(inviteUserDTO);
 				earning += entity.getEarning();
 			}

@@ -67,7 +67,10 @@ function appendImgs(imgs, ele) {
 //		ele.appendChild(imgEle);
 		
 		var divEle = document.createElement("div");
-		if(img.recharge == true) {
+		if(img.recharge == true && img.level == 3) {
+			divEle.className += "opacity-value";
+		}
+		else if(img.recharge == true) {
 			divEle.className += "is-user";
 		}
         var imgEle = document.createElement("img");
@@ -115,13 +118,13 @@ $(function() {
         success : function(data) {
         	$("#level1Count").html(data.data.level1.length);
         	$("#level2Count").html(data.data.level2.length);
-        	$("#level3Count").html(data.data.level3.length);
+//        	$("#level3Count").html(data.data.level3.length);
         	
         	$("#level1Earning").html(data.data.level1Earning);
         	$("#level2Earning").html(data.data.level2Earning);
-        	$("#level3Earning").html(data.data.level3Earning);
+//        	$("#level3Earning").html(data.data.level3Earning);
         	
-        	data = [data.data.level1, data.data.level2, data.data.level3];
+        	data = [data.data.level1, data.data.level2];
         	eleWidth = document.getElementById('firstList').offsetWidth;
         	chuWidth = document.getElementById('getPx').offsetWidth;
         	maxnum = Math.floor(eleWidth / chuWidth);

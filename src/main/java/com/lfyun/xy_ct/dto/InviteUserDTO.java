@@ -14,4 +14,6 @@ public class InviteUserDTO {
 	private Double earning;
 	
 	private Boolean recharge;
+	
+	private Integer level;
 }
