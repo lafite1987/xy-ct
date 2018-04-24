@@ -1,5 +1,6 @@
 package com.lfyun.xy_ct.service;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
@@ -14,8 +15,10 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.lfyun.xy_ct.common.User;
+import com.lfyun.xy_ct.common.enums.ExceptionCodeEnums;
 import com.lfyun.xy_ct.common.util.JwtToken;
 import com.lfyun.xy_ct.entity.UserEntity;
+import com.lfyun.xy_ct.exception.AppException;
 
 @Component
 public class SessionManager {
@@ -74,7 +77,12 @@ public class SessionManager {
 			if(userId == null) {
 				return null;
 			}
-			User user = CACHE.getIfPresent(userId);
+			User user = null;
+			try {
+				user = CACHE.get(userId);
+			} catch (ExecutionException e) {
+				throw new AppException(ExceptionCodeEnums.LOGIN_FAIL);
+			}
 			return user;
 		}
 		return null;

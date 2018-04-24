@@ -67,8 +67,10 @@ function appendImgs(imgs, ele) {
 //		ele.appendChild(imgEle);
 		
 		var divEle = document.createElement("div");
-		if(img.recharge == true && img.level == 3) {
+		if(img.recharge == false && (img.level == 3 || img.level == 2) ) {
 			divEle.className += "opacity-value";
+		} else if(img.recharge == true && img.level == 3) {
+			
 		}
 		else if(img.recharge == true) {
 			divEle.className += "is-user";
