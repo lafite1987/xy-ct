@@ -17,4 +17,11 @@ public interface OrderService extends IService<OrderEntity> {
 	 * @return
 	 */
 	boolean isRecharge(Long productId, Long userId);
+	/**
+	 * 判断用户充值但是没有消费
+	 * @param productId
+	 * @param userId
+	 * @return
+	 */
+	boolean isRechargeAndNoConsume(Long productId, Long userId);
 }

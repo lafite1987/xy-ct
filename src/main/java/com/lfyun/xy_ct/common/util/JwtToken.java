@@ -77,7 +77,7 @@ public class JwtToken {
     }  
     
     public static void main(String[] args) {
-		String token = JwtToken.createToken(19L);
+		String token = JwtToken.createToken(299L);
 		System.out.println(token);
 	}
 }  

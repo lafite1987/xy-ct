@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lfyun.xy_ct.common.Result;
 import com.lfyun.xy_ct.common.User;
+import com.lfyun.xy_ct.common.enums.ExceptionCodeEnums;
 import com.lfyun.xy_ct.common.enums.PayStatusEnums;
 import com.lfyun.xy_ct.configure.wx.ProjectUrlConfig;
 import com.lfyun.xy_ct.dto.OrderDTO;
 import com.lfyun.xy_ct.entity.OrderEntity;
 import com.lfyun.xy_ct.entity.ProductEntity;
+import com.lfyun.xy_ct.exception.AppException;
 import com.lfyun.xy_ct.service.OrderService;
 import com.lfyun.xy_ct.service.ProductService;
 import com.lfyun.xy_ct.service.ProductShareUserService;
@@ -65,6 +67,12 @@ public class OrderCtrl {
 			return "redirect:" + redirectUrl;
 		}
 		ProductEntity productEntity = productService.selectById(productId);
+		if(productEntity == null) {
+			throw new AppException(ExceptionCodeEnums.PRODUCT_NOT_FOUND);
+		}
+		if(orderService.isRechargeAndNoConsume(productId, user.getId())) {
+			throw new AppException(ExceptionCodeEnums.RECHARGE_AND_NO_CONSUME);
+		}
 		OrderEntity orderEntity = new OrderEntity();
 		orderEntity.setProductId(productId);
 		orderEntity.setProductName(productEntity.getTitle());
@@ -188,6 +196,15 @@ public class OrderCtrl {
 		orderDTO.setPayFinishTime(System.currentTimeMillis()/1000);
 		orderService.pay(orderDTO);
 		Result<Void> result = Result.success();
+		return result;
+	}
+	
+	@RequestMapping(value = "/order/isRechargeAndNoConsume", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<Boolean> isRechargeAndNoConsume(Long productId, Long userId) {
+		boolean flag = orderService.isRechargeAndNoConsume(productId, userId);
+		Result<Boolean> result = Result.success();
+		result.setData(flag);
 		return result;
 	}
 }

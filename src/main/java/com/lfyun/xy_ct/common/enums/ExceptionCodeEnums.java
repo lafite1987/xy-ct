@@ -69,6 +69,8 @@ public enum ExceptionCodeEnums {
     USER_DATA_ERROR(51, "用户二维码错误"),
     
     USERNAME_OR_PASSWORD_ERROR(401, "用户名或密码不正确"),
+    
+    RECHARGE_AND_NO_CONSUME(402, "已充值，但没消费，请先消费"),
     ;
 
     private Integer code;

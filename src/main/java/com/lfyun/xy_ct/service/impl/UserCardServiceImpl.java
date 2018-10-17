@@ -57,7 +57,7 @@ public class UserCardServiceImpl extends ServiceImpl<UserCardMapper,UserCardEnti
 	@Override
 	public boolean useCard(Long userId, Long userCardId) {
 		UserCardEntity userCardEntity = this.selectById(userCardId);
-		if(userCardEntity != null && userCardEntity.getState() == 1 && userCardEntity.getUserId() == userId) {
+		if(userCardEntity != null && userCardEntity.getState().longValue() == 1 && userCardEntity.getUserId().longValue() == userId.longValue()) {
 			CardEntity cardEntity = cardService.selectById(userCardEntity.getCardId());
 			long time = System.currentTimeMillis();
 			if(cardEntity.getEffectiveBeginTime() <= time && cardEntity.getEffectiveEndTime() >= time) {
